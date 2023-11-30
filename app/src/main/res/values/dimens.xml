@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="title_size">26sp</dimen>
+    <dimen name="icon_padding_size">8dp</dimen>
+    <dimen name="main_button_corner_radius">16dp</dimen>
+</resources>
