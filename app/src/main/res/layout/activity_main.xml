@@ -30,10 +30,12 @@
         android:orientation="vertical">
 
         <Button
+            android:id="@+id/search_button"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:backgroundTint="@color/white"
+            android:foreground="?attr/selectableItemBackground"
             android:text="@string/search_button"
             android:textColor="@color/black"
             android:textSize="@dimen/title_size"
@@ -44,11 +46,13 @@
             app:iconTint="@color/black" />
 
         <Button
+            android:id="@+id/media_button"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="16dp"
             android:layout_weight="1"
             android:backgroundTint="@color/white"
+            android:foreground="?attr/selectableItemBackground"
             android:text="@string/media_button"
             android:textColor="@color/black"
             android:textSize="@dimen/title_size"
@@ -59,11 +63,13 @@
             app:iconTint="@color/black" />
 
         <Button
+            android:id="@+id/settings_button"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="16dp"
             android:layout_weight="1"
             android:backgroundTint="@color/white"
+            android:foreground="?attr/selectableItemBackground"
             android:text="@string/settings_button"
             android:textColor="@color/black"
             android:textSize="@dimen/title_size"
