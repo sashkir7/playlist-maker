@@ -32,34 +32,22 @@
         <Button
             android:id="@+id/search_button"
             style="@style/MenuButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
             android:text="@string/search_button"
-            app:icon="@drawable/search_icon"
-            app:iconPadding="@dimen/icon_padding_size" />
+            app:icon="@drawable/search_icon" />
 
         <Button
             android:id="@+id/media_button"
             style="@style/MenuButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
             android:layout_marginTop="16dp"
-            android:layout_weight="1"
             android:text="@string/media_button"
-            app:icon="@drawable/media_icon"
-            app:iconPadding="@dimen/icon_padding_size" />
+            app:icon="@drawable/media_icon" />
 
         <Button
             android:id="@+id/settings_button"
             style="@style/MenuButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
             android:layout_marginTop="16dp"
-            android:layout_weight="1"
             android:text="@string/settings_button"
-            app:icon="@drawable/settings_icon"
-            app:iconPadding="@dimen/icon_padding_size" />
+            app:icon="@drawable/settings_icon" />
 
     </LinearLayout>
 
