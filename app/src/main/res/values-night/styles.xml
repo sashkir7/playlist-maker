@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Override activities -->
+    <style name="AbstractMainActivityStyle">
+        <item name="android:background">@color/blackYP</item>
+    </style>
+
+    <style name="SecondaryActivityStyle" parent="MainActivityStyle">
+        <item name="android:background">@color/blackYP</item>
+    </style>
+
+    <!-- Override activity titles -->
+    <style name="AbstractMainActivityTitleStyle">
+        <item name="android:textColor">@color/whiteAbsolute</item>
+    </style>
+
+    <style name="SecondaryActivityTitleStyle" parent="MainActivityTitleStyle">
+        <item name="android:textColor">@color/whiteAbsolute</item>
+    </style>
+
+    <!-- Override settings view styles -->
+    <style name="AbstractSettingsTextViewStyle">
+        <item name="android:textColor">@color/whiteAbsolute</item>
+    </style>
+
+    <style name="AbstractSettingsIconStyle">
+        <item name="tint">@color/whiteAbsolute</item>
+    </style>
+
+    <!-- Override navigation bar styles -->
+    <style name="AbstractBackButtonNavigationBarStyle">
+        <item name="tint">@color/whiteAbsolute</item>
+    </style>
+
+</resources>
