@@ -17,4 +17,26 @@
         <item name="android:layout_weight">1</item>
     </style>
 
+    <style name="SettingsItemStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">12dp</item>
+    </style>
+
+    <style name="SettingsTextViewStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingVertical">@dimen/settings_textview_padding_vertical</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/settings_textview_text_size</item>
+    </style>
+
+    <style name="SettingsIconStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_gravity">end|center</item>
+        <item name="android:paddingVertical">18dp</item>
+    </style>
+
 </resources>
