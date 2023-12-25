@@ -90,7 +90,7 @@
         <item name="tint">@color/blackAbsolute</item>
     </style>
 
-    <style name="BackButtonnavigationBarStyle" parent="AbstractBackButtonNavigationBarStyle">
+    <style name="BackButtonNavigationBarStyle" parent="AbstractBackButtonNavigationBarStyle">
         <item name="android:layout_width">48dp</item>
         <item name="android:layout_height">48dp</item>
         <item name="android:padding">12dp</item>

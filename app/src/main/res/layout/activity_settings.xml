@@ -7,7 +7,7 @@
         android:layout_height="wrap_content"
         android:padding="4dp">
 
-        <ImageView style="@style/BackButtonnavigationBarStyle" />
+        <ImageView style="@style/BackButtonNavigationBarStyle" />
 
         <TextView
             style="@style/SecondaryActivityTitleStyle"
