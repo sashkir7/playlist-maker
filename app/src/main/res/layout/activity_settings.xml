@@ -37,6 +37,7 @@
             android:text="@string/share_application" />
 
         <ImageView
+            android:id="@+id/share_app_button"
             style="@style/SettingsIconStyle"
             android:src="@drawable/share_application_icon" />
 
@@ -49,6 +50,7 @@
             android:text="@string/write_to_support" />
 
         <ImageView
+            android:id="@+id/support_button"
             style="@style/SettingsIconStyle"
             android:src="@drawable/support_icon" />
 
@@ -61,6 +63,7 @@
             android:text="@string/user_agreement" />
 
         <ImageView
+            android:id="@+id/agreement_button"
             style="@style/SettingsIconStyle"
             android:src="@drawable/next_gray_icon" />
 
