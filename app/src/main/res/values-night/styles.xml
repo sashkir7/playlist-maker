@@ -33,4 +33,16 @@
         <item name="tint">@color/whiteAbsolute</item>
     </style>
 
+    <!-- Override search view styles -->
+    <style name="AbstractSearchEditTextStyle">
+        <item name="android:drawableTint">@color/blackYP</item>
+        <item name="android:backgroundTint">@color/whiteAbsolute</item>
+        <item name="android:iconTint">@color/blackYP</item>
+        <item name="android:textColorHint">@color/blackYP</item>
+    </style>
+
+    <style name="AbstractSearchEditTextCloseButtonStyle">
+        <item name="tint">@color/blackYP</item>
+    </style>
+
 </resources>

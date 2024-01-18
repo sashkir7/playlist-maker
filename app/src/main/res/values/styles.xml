@@ -98,34 +98,35 @@
     </style>
 
     <!-- Search view styles -->
-    <style name="SearchEditTextStyle">
+    <style name="AbstractSearchEditTextStyle">
+        <item name="android:drawableTint">@color/grayYP</item>
+        <item name="android:backgroundTint">@color/grayLightYP</item>
+        <item name="android:iconTint">@color/grayYP</item>
+        <item name="android:textColorHint">@color/grayYP</item>
+    </style>
+
+    <style name="SearchEditTextStyle" parent="AbstractSearchEditTextStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">36dp</item>
-
         <item name="android:paddingLeft">12dp</item>
         <item name="android:paddingHorizontal">10dp</item>
         <item name="android:drawablePadding">8dp</item>
         <item name="android:background">@drawable/ic_radius_background</item>
-
         <item name="android:lines">1</item>
         <item name="android:maxLength">40</item>
-
         <item name="android:drawableStart">@drawable/search_icon</item>
-        <item name="android:drawableTint">@color/grayYP</item>
-
-        <item name="android:backgroundTint">@color/grayLightYP</item>
-
         <item name="android:inputType">text</item>
-        <item name="android:iconTint">@color/grayYP</item>
-
         <item name="android:hint">@string/search_button</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
-        <item name="android:textColorHint">@color/grayYP</item>
         <item name="android:textFontWeight">400</item>
         <item name="android:textSize">16sp</item>
     </style>
 
-    <style name="SearchEditTextCloseButtonStyle">
+    <style name="AbstractSearchEditTextCloseButtonStyle">
+        <item name="tint">@color/grayYP</item>
+    </style>
+
+    <style name="SearchEditTextCloseButtonStyle" parent="AbstractSearchEditTextCloseButtonStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">end|center</item>
