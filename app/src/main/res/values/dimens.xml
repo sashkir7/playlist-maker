@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="title_size">22sp</dimen>
+    <dimen name="icon_8">8dp</dimen>
+    <dimen name="icon_12">12dp</dimen>
+    <dimen name="icon_16">16dp</dimen>
+    <dimen name="icon_24">24dp</dimen>
+    <dimen name="icon_28">28dp</dimen>
+
     <dimen name="icon_padding_size">8dp</dimen>
     <dimen name="main_button_corner_radius">16dp</dimen>
     <dimen name="settings_textview_padding_vertical">21dp</dimen>
+
+    <dimen name="title_size">22sp</dimen>
     <dimen name="settings_textview_text_size">16sp</dimen>
 </resources>
