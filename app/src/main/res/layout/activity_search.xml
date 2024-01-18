@@ -22,11 +22,14 @@
         android:layout_marginTop="8dp"
         android:paddingHorizontal="16dp">
 
-        <EditText style="@style/SearchEditTextStyle" />
+        <EditText
+            android:id="@+id/searchEditText"
+            style="@style/SearchEditTextStyle" />
 
         <ImageView
+            android:id="@+id/clearSearchButton"
             style="@style/SearchEditTextCloseButtonStyle"
-            android:visibility="gone" />
+            android:visibility="gone"/>
     </FrameLayout>
 
 </LinearLayout>
