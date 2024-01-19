@@ -19,6 +19,7 @@ class SearchActivity : AppCompatActivity() {
 
     private var searchValue = ""
 
+    private val backButton by lazy { findViewById<ImageView>(R.id.backButton) }
     private val searchEditText by lazy { findViewById<EditText>(R.id.searchEditText) }
     private val clearSearchButton by lazy { findViewById<ImageView>(R.id.clearSearchButton) }
 
@@ -26,6 +27,7 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
+        configureBackButton()
         configureSearchInput()
     }
 
@@ -38,6 +40,10 @@ class SearchActivity : AppCompatActivity() {
         super.onRestoreInstanceState(savedInstanceState)
         val searchValue = savedInstanceState.getString(SEARCH_VALUE_KEY, "")
         searchEditText.setText(searchValue)
+    }
+
+    private fun configureBackButton() {
+        backButton.setOnClickListener { onBackPressed() }
     }
 
     private fun configureSearchInput() {

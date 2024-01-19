@@ -6,7 +6,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView style="@style/BackButtonNavigationBarStyle" />
+        <ImageView
+            android:id="@+id/backButton"
+            style="@style/BackButtonNavigationBarStyle" />
 
         <TextView
             style="@style/SecondaryActivityTitleStyle"
