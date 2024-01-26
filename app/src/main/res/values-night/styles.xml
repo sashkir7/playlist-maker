@@ -41,7 +41,7 @@
         <item name="android:textColorHint">@color/blackYP</item>
     </style>
 
-    <style name="AbstractSearchEditTextCloseButtonStyle">
+    <style name="AbstractSearchIconStyle">
         <item name="tint">@color/blackYP</item>
     </style>
 

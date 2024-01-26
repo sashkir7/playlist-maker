@@ -26,11 +26,24 @@
 
         <EditText
             android:id="@+id/searchEditText"
-            style="@style/SearchEditTextStyle" />
+            style="@style/SearchEditTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:paddingStart="36dp" />
+
+        <ImageView
+            android:id="@+id/searchButton"
+            style="@style/SearchIconStyle"
+            android:layout_gravity="start|center"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/search_icon" />
 
         <ImageView
             android:id="@+id/clearSearchButton"
-            style="@style/SearchEditTextCloseButtonStyle"
+            style="@style/SearchIconStyle"
+            android:layout_gravity="end|center"
+            android:layout_marginEnd="12dp"
+            android:src="@drawable/close_icon"
             android:visibility="gone" />
     </FrameLayout>
 
