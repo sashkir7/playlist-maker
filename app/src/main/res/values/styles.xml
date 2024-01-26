@@ -141,8 +141,6 @@
 
     <style name="TrackItemImageStyle" parent="AbstractTrackItemImageStyle">
         <item name="android:scaleType">centerCrop</item>
-        <item name="android:src">@drawable/track_placeholder</item>
-        <item name="tint">@color/grayYP</item>
     </style>
 
     <style name="AbstractTrackTitleStyle">
