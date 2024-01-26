@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import model.Track
+import model.mockTracks
 
 class SearchActivity : AppCompatActivity() {
 
@@ -28,8 +29,11 @@ class SearchActivity : AppCompatActivity() {
     private val tracksAdapter by lazy { TracksAdapter(tracks) }
 
     private val backButton by lazy { findViewById<ImageView>(R.id.backButton) }
+
     private val searchEditText by lazy { findViewById<EditText>(R.id.searchEditText) }
+    private val searchButton by lazy { findViewById<ImageView>(R.id.searchButton) }
     private val clearSearchButton by lazy { findViewById<ImageView>(R.id.clearSearchButton) }
+
     private val tracksRecycler by lazy { findViewById<RecyclerView>(R.id.tracksRecycler) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,8 +62,20 @@ class SearchActivity : AppCompatActivity() {
 
     private fun configureSearchInput() {
         clearSearchButton.setOnClickListener {
-            searchEditText.text.clear()
-            hideKeyboard()
+            tracks.clear()
+            tracksAdapter.notifyDataSetChanged()
+
+            resetSearchInput()
+        }
+
+        searchButton.setOnClickListener {
+            if (searchValue.isNotEmpty()) {
+                tracks.clear()
+                tracks.addAll(mockTracks)
+                tracksAdapter.notifyDataSetChanged()
+
+                hideKeyboard()
+            }
         }
 
         val textWatcher = object : TextWatcher {
@@ -78,6 +94,12 @@ class SearchActivity : AppCompatActivity() {
     private fun configureTracksRecycler() {
         tracksRecycler.layoutManager = LinearLayoutManager(this)
         tracksRecycler.adapter = tracksAdapter
+    }
+
+    private fun resetSearchInput() {
+        searchEditText.text.clear()
+        searchValue = ""
+        hideKeyboard()
     }
 
     private fun hideKeyboard() {
