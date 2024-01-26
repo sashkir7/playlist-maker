@@ -134,4 +134,49 @@
         <item name="android:src">@drawable/close_icon</item>
     </style>
 
+    <!-- Track recycler item view styles -->
+    <style name="AbstractTrackItemImageStyle">
+        <item name="background">@color/whiteAbsolute</item>
+    </style>
+
+    <style name="TrackItemImageStyle" parent="AbstractTrackItemImageStyle">
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:src">@drawable/track_placeholder</item>
+        <item name="tint">@color/grayYP</item>
+    </style>
+
+    <style name="AbstractTrackTitleStyle">
+        <item name="android:textColor">@color/blackAbsolute</item>
+    </style>
+
+    <style name="TrackTitleStyle" parent="AbstractTrackTitleStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="fontFamily">@font/ys_display_regular</item>
+        <item name="singleLine">true</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="AbstractTrackSubtitleStyle">
+        <item name="android:textColor">@color/grayYP</item>
+    </style>
+
+    <style name="TrackSubtitleStyle" parent="AbstractTrackSubtitleStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="fontFamily">@font/ys_display_regular</item>
+        <item name="singleLine">true</item>
+        <item name="android:textSize">11sp</item>
+    </style>
+
+    <style name="AbstractTrackIconTitle">
+        <item name="tint">@color/grayYP</item>
+    </style>
+
+    <style name="TrackIconTitle" parent="AbstractTrackIconTitle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
 </resources>
