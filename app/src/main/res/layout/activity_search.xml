@@ -31,7 +31,13 @@
         <ImageView
             android:id="@+id/clearSearchButton"
             style="@style/SearchEditTextCloseButtonStyle"
-            android:visibility="gone"/>
+            android:visibility="gone" />
     </FrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/tracksRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginVertical="16dp" />
 
 </LinearLayout>
