@@ -116,6 +116,7 @@
         <item name="android:hint">@string/search_button</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
         <item name="android:textFontWeight">400</item>
+        <item name="android:textColor">@color/blackYP</item>
         <item name="android:textSize">16sp</item>
     </style>
 
