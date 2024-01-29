@@ -41,8 +41,25 @@
         <item name="android:textColorHint">@color/blackYP</item>
     </style>
 
-    <style name="AbstractSearchEditTextCloseButtonStyle">
+    <style name="AbstractSearchIconStyle">
         <item name="tint">@color/blackYP</item>
+    </style>
+
+    <!-- Override track recycler item view styles -->
+    <style name="AbstractTrackItemImageStyle">
+        <item name="background">@color/blackYP</item>
+    </style>
+
+    <style name="AbstractTrackTitleStyle">
+        <item name="android:textColor">@color/whiteAbsolute</item>
+    </style>
+
+    <style name="AbstractTrackSubtitleStyle">
+        <item name="android:textColor">@color/whiteAbsolute</item>
+    </style>
+
+    <style name="AbstractTrackIconTitle">
+        <item name="tint">@color/whiteAbsolute</item>
     </style>
 
 </resources>

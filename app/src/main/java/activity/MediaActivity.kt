@@ -1,7 +1,8 @@
-package com.example.playlistmaker
+package activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.playlistmaker.R
 
 class MediaActivity : AppCompatActivity() {
 

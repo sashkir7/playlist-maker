@@ -15,4 +15,8 @@
 
     <string name="user_agreement">Пользовательское соглашение</string>
     <string name="agreement_url">https://yandex.ru/legal/practicum_offer</string>
+
+    <string name="track_default_name">Название песни</string>
+    <string name="track_default_artist">Имя артиста</string>
+    <string name="track_default_time">3:33</string>
 </resources>

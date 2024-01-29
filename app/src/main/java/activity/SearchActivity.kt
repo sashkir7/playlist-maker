@@ -1,5 +1,6 @@
-package com.example.playlistmaker
+package activity
 
+import adapter.TracksAdapter
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
@@ -10,6 +11,11 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.R
+import model.Track
+import model.mockTracks
 
 class SearchActivity : AppCompatActivity() {
 
@@ -18,10 +24,17 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private var searchValue = ""
+    private val tracks: MutableList<Track> = mutableListOf()
+
+    private val tracksAdapter by lazy { TracksAdapter(tracks) }
 
     private val backButton by lazy { findViewById<ImageView>(R.id.backButton) }
+
     private val searchEditText by lazy { findViewById<EditText>(R.id.searchEditText) }
+    private val searchButton by lazy { findViewById<ImageView>(R.id.searchButton) }
     private val clearSearchButton by lazy { findViewById<ImageView>(R.id.clearSearchButton) }
+
+    private val tracksRecycler by lazy { findViewById<RecyclerView>(R.id.tracksRecycler) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +42,7 @@ class SearchActivity : AppCompatActivity() {
 
         configureBackButton()
         configureSearchInput()
+        configureTracksRecycler()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -48,8 +62,20 @@ class SearchActivity : AppCompatActivity() {
 
     private fun configureSearchInput() {
         clearSearchButton.setOnClickListener {
-            searchEditText.text.clear()
-            hideKeyboard()
+            tracks.clear()
+            tracksAdapter.notifyDataSetChanged()
+
+            resetSearchInput()
+        }
+
+        searchButton.setOnClickListener {
+            if (searchValue.isNotEmpty()) {
+                tracks.clear()
+                tracks.addAll(mockTracks)
+                tracksAdapter.notifyDataSetChanged()
+
+                hideKeyboard()
+            }
         }
 
         val textWatcher = object : TextWatcher {
@@ -63,6 +89,17 @@ class SearchActivity : AppCompatActivity() {
             }
         }
         searchEditText.addTextChangedListener(textWatcher)
+    }
+
+    private fun configureTracksRecycler() {
+        tracksRecycler.layoutManager = LinearLayoutManager(this)
+        tracksRecycler.adapter = tracksAdapter
+    }
+
+    private fun resetSearchInput() {
+        searchEditText.text.clear()
+        searchValue = ""
+        hideKeyboard()
     }
 
     private fun hideKeyboard() {
