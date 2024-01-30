@@ -31,7 +31,7 @@ class SearchActivity : AppCompatActivity() {
         private const val SEARCH_VALUE_KEY = "SEARCH_VALUE_KEY"
     }
 
-    private var searchValue = ""
+    private var lastSearchText = ""
 
     private val tracks: MutableList<TrackDto> = mutableListOf()
     private val tracksAdapter by lazy { TracksAdapter(tracks) }
@@ -50,7 +50,6 @@ class SearchActivity : AppCompatActivity() {
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         override fun afterTextChanged(s: Editable?) {
             clearSearchButton.visibility = if (s.isNullOrEmpty()) GONE else VISIBLE
-            searchValue = s.toString()
         }
     }
 
@@ -72,6 +71,7 @@ class SearchActivity : AppCompatActivity() {
     private val searchEditTextActionDoneListener =
         OnEditorActionListener { _, actionId, _ ->
             if (actionId != EditorInfo.IME_ACTION_DONE) false
+            lastSearchText = searchEditText.text.toString()
             searchInItunes()
             true
         }
@@ -88,7 +88,7 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(SEARCH_VALUE_KEY, searchValue)
+        outState.putString(SEARCH_VALUE_KEY, searchEditText.text.toString())
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -115,7 +115,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun searchInItunes(): Unit =
-        ITunesClient.search(searchValue, searchTracksCallback)
+        ITunesClient.search(lastSearchText, searchTracksCallback)
 
     private fun hideKeyboard() {
         currentFocus?.let { view ->
@@ -125,14 +125,12 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun handleClearState() {
-        searchEditText.text.clear()
-        searchValue = ""
-
-        tracks.clear()
-
         tracksRecycler.visibility = GONE
         tracksNotFoundView.visibility = GONE
         tracksNetworkErrorView.visibility = GONE
+
+        searchEditText.text.clear()
+        tracks.clear()
 
         hideKeyboard()
     }
@@ -153,6 +151,7 @@ class SearchActivity : AppCompatActivity() {
         tracksRecycler.visibility = GONE
         tracksNotFoundView.visibility = VISIBLE
         tracksNetworkErrorView.visibility = GONE
+
         tracks.clear()
     }
 
