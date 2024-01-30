@@ -3,6 +3,8 @@
     <string name="search_button">Поиск</string>
     <string name="media_button">Медиатека</string>
     <string name="settings_button">Настройки</string>
+    <string name="update_button">Обновить</string>
+
     <string name="black_theme">Темная тема</string>
 
     <string name="share_application">Поделиться приложением</string>
@@ -19,4 +21,8 @@
     <string name="track_default_name">Название песни</string>
     <string name="track_default_artist">Имя артиста</string>
     <string name="track_default_time">3:33</string>
+
+    <string name="tracks_not_found">Ничего не нашлось</string>
+    <string name="network_error">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
+
 </resources>
