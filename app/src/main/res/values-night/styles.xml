@@ -45,6 +45,23 @@
         <item name="tint">@color/blackYP</item>
     </style>
 
+    <style name="AbstractTracksNotFoundImageViewStyle">
+        <item name="android:src">@drawable/tracks_not_found_night</item>
+    </style>
+
+    <style name="AbstractTracksNetworkErrorImageViewStyle">
+        <item name="android:src">@drawable/network_error_night</item>
+    </style>
+
+    <style name="AbstractTracksInformationTextViewStyle">
+        <item name="android:textColor">@color/whiteAbsolute</item>
+    </style>
+
+    <style name="AbstractTracksUpdateButtonStyle">
+        <item name="android:backgroundTint">@color/whiteAbsolute</item>
+        <item name="android:textColor">@color/blackYP</item>
+    </style>
+
     <!-- Override track recycler item view styles -->
     <style name="AbstractTrackItemImageStyle">
         <item name="background">@color/blackYP</item>

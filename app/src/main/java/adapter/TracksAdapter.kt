@@ -3,11 +3,11 @@ package adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import api.dtos.TrackDto
 import com.example.playlistmaker.R
-import model.Track
 import viewHolder.TracksViewHolder
 
-class TracksAdapter(private val tracks: List<Track>) : RecyclerView.Adapter<TracksViewHolder>() {
+class TracksAdapter(private val tracks: List<TrackDto>) : RecyclerView.Adapter<TracksViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TracksViewHolder {
         val trackView = LayoutInflater.from(parent.context)

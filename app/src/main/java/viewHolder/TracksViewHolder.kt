@@ -4,9 +4,10 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import api.dtos.TrackDto
+import api.dtos.trackTimeAsString
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
-import model.Track
 
 class TracksViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -22,10 +23,10 @@ class TracksViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         trackImageView = itemView.findViewById(R.id.trackImage)
     }
 
-    fun bind(model: Track) {
+    fun bind(model: TrackDto) {
         trackNameView.text = model.trackName
         artistNameView.text = model.artistName
-        trackTimeView.text = model.trackTime
+        trackTimeView.text = model.trackTimeAsString()
         loadAndSetTrackImage(model.artworkUrl100)
     }
 
