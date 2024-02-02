@@ -59,8 +59,8 @@ class SearchActivity : AppCompatActivity() {
             response: Response<TracksResponseDto>
         ) {
             val tracks: List<TrackDto> = checkNotNull(response.body()).results
-            if (tracks.isEmpty()) handleEmptyTrackState()
-            else handleNotEmptyTrackState(tracks)
+            if (tracks.isEmpty()) { handleEmptyTrackState() }
+            else { handleNotEmptyTrackState(tracks) }
         }
 
         override fun onFailure(call: Call<TracksResponseDto>, t: Throwable) {
@@ -70,7 +70,7 @@ class SearchActivity : AppCompatActivity() {
 
     private val searchEditTextActionDoneListener =
         OnEditorActionListener { _, actionId, _ ->
-            if (actionId != EditorInfo.IME_ACTION_DONE) false
+            if (actionId != EditorInfo.IME_ACTION_DONE) { false }
             lastSearchText = searchEditText.text.toString()
             searchInItunes()
             true
