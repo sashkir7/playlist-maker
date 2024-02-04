@@ -28,7 +28,9 @@
             style="@style/SettingsTextViewStyle"
             android:text="@string/black_theme" />
 
-        <androidx.appcompat.widget.SwitchCompat style="@style/SettingsIconStyle" />
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/themeSwitcher"
+            style="@style/SettingsIconStyle" />
 
     </FrameLayout>
 
