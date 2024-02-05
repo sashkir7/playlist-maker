@@ -42,13 +42,10 @@ class SearchActivity : AppCompatActivity() {
         )
     }
 
-    private val tracks: MutableList<TrackDto> = mutableListOf()
     private val tracksAdapter by lazy {
-        TracksAdapter(tracks) { track -> OnClickListener { historyDataSource.addTrack(track) } }
+        TracksAdapter { track -> OnClickListener { historyDataSource.addTrack(track) } }
     }
-
-    private val history: MutableList<TrackDto> = mutableListOf()
-    private val historyAdapter by lazy { TracksAdapter(history) { OnClickListener {} } }
+    private val historyAdapter by lazy { TracksAdapter { OnClickListener {} } }
 
     private val backButton by lazy { findViewById<ImageView>(R.id.backButton) }
     private val searchEditText by lazy { findViewById<EditText>(R.id.searchEditText) }
@@ -156,7 +153,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun configureClearHistoryButton(): Unit =
         clearHistoryButton.setOnClickListener {
-            history.clear()
+            historyAdapter.clearAll()
             historyDataSource.clearAll()
             handleHideHistoryTracksState()
         }
@@ -187,7 +184,7 @@ class SearchActivity : AppCompatActivity() {
         tracksNetworkErrorView.visibility = GONE
 
         searchEditText.text.clear()
-        tracks.clear()
+        tracksAdapter.clearAll()
 
         hideKeyboard()
     }
@@ -198,10 +195,7 @@ class SearchActivity : AppCompatActivity() {
         tracksNetworkErrorView.visibility = GONE
         historyView.visibility = GONE
 
-        this.tracks.clear()
-        this.tracks.addAll(tracks)
-        tracksAdapter.notifyDataSetChanged()
-
+        tracksAdapter.setTracks(tracks)
         hideKeyboard()
     }
 
@@ -211,7 +205,7 @@ class SearchActivity : AppCompatActivity() {
         tracksNetworkErrorView.visibility = GONE
         historyView.visibility = GONE
 
-        tracks.clear()
+        tracksAdapter.clearAll()
     }
 
     private fun handleNetworkErrorState() {
@@ -221,7 +215,7 @@ class SearchActivity : AppCompatActivity() {
         historyView.visibility = GONE
 
         searchEditText.text.clear()
-        tracks.clear()
+        tracksAdapter.clearAll()
 
         hideKeyboard()
     }
@@ -232,9 +226,7 @@ class SearchActivity : AppCompatActivity() {
             historyView.visibility = GONE
         } else {
             historyView.visibility = VISIBLE
-            history.clear()
-            history.addAll(tracks)
-            historyAdapter.notifyDataSetChanged()
+            historyAdapter.setTracks(tracks)
         }
     }
 

@@ -9,14 +9,15 @@ import com.example.playlistmaker.R
 import viewHolder.TracksViewHolder
 
 class TracksAdapter(
-    private val tracks: List<TrackDto>,
-    private val onClickItemViewListener: (track: TrackDto) -> OnClickListener
+    private val onClickListener: (track: TrackDto) -> OnClickListener
 ) : RecyclerView.Adapter<TracksViewHolder>() {
 
+    private var tracks: List<TrackDto> = emptyList()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TracksViewHolder {
-        val trackView = LayoutInflater.from(parent.context)
+        val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.recycler_item_track, parent, false)
-        return TracksViewHolder(trackView)
+        return TracksViewHolder(view)
     }
 
     override fun getItemCount(): Int = tracks.size
@@ -24,8 +25,13 @@ class TracksAdapter(
     override fun onBindViewHolder(holder: TracksViewHolder, position: Int) {
         val track = tracks[position]
         holder.bind(track)
-
-        val onClickListener = onClickItemViewListener(track)
-        holder.itemView.setOnClickListener(onClickListener)
+        holder.itemView.setOnClickListener(onClickListener(track))
     }
+
+    fun setTracks(tracks: List<TrackDto>) {
+        this.tracks = tracks
+        notifyDataSetChanged()
+    }
+
+    fun clearAll(): Unit = setTracks(emptyList())
 }
