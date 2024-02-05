@@ -61,22 +61,16 @@ class SearchActivity : AppCompatActivity() {
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             if (searchEditText.hasFocus() && s?.isEmpty() == true) {
                 handleShowHistoryTracksState()
-            } else {
-                handleHideHistoryTracksState()
-            }
+            } else { handleHideHistoryTracksState() }
         }
-
         override fun afterTextChanged(s: Editable?) {
             clearSearchButton.visibility = if (s.isNullOrEmpty()) GONE else VISIBLE
         }
     }
 
     private val searchFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
-        if (hasFocus && searchEditText.text.isEmpty()) {
-            handleShowHistoryTracksState()
-        } else {
-            handleHideHistoryTracksState()
-        }
+        if (hasFocus && searchEditText.text.isEmpty()) { handleShowHistoryTracksState() }
+        else { handleHideHistoryTracksState() }
     }
 
     private val searchTracksCallback = object : Callback<TracksResponseDto> {
@@ -85,13 +79,9 @@ class SearchActivity : AppCompatActivity() {
             response: Response<TracksResponseDto>
         ) {
             val tracks: List<TrackDto> = checkNotNull(response.body()).results
-            if (tracks.isEmpty()) {
-                handleEmptyTrackState()
-            } else {
-                handleNotEmptyTrackState(tracks)
-            }
+            if (tracks.isEmpty()) { handleEmptyTrackState() }
+            else { handleNotEmptyTrackState(tracks) }
         }
-
         override fun onFailure(call: Call<TracksResponseDto>, t: Throwable) {
             handleNetworkErrorState()
         }
@@ -99,9 +89,7 @@ class SearchActivity : AppCompatActivity() {
 
     private val searchEditTextActionDoneListener =
         OnEditorActionListener { _, actionId, _ ->
-            if (actionId != EditorInfo.IME_ACTION_DONE) {
-                false
-            }
+            if (actionId != EditorInfo.IME_ACTION_DONE) { false }
             lastSearchText = searchEditText.text.toString()
             searchInItunes()
             true
@@ -117,7 +105,7 @@ class SearchActivity : AppCompatActivity() {
         configureClearHistoryButton()
 
         configureTracksRecycler()
-        configureHistoryTracksRecycler()
+        configureHistoryRecycler()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -143,9 +131,8 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun configureUpdateButton() {
+    private fun configureUpdateButton(): Unit =
         updateButton.setOnClickListener { searchInItunes() }
-    }
 
     private fun configureClearHistoryButton(): Unit =
         clearHistoryButton.setOnClickListener {
@@ -159,7 +146,7 @@ class SearchActivity : AppCompatActivity() {
         tracksRecycler.adapter = tracksAdapter
     }
 
-    private fun configureHistoryTracksRecycler() {
+    private fun configureHistoryRecycler() {
         historyRecycler.layoutManager = LinearLayoutManager(this)
         historyRecycler.adapter = historyAdapter
     }
