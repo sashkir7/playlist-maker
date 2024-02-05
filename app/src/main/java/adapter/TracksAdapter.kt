@@ -1,15 +1,16 @@
 package adapter
 
 import android.view.LayoutInflater
+import android.view.View.OnClickListener
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import api.dtos.TrackDto
-import app.App
 import com.example.playlistmaker.R
 import viewHolder.TracksViewHolder
 
 class TracksAdapter(
-    private val tracks: List<TrackDto>
+    private val tracks: List<TrackDto>,
+    private val onClickItemViewListener: (track: TrackDto) -> OnClickListener
 ) : RecyclerView.Adapter<TracksViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TracksViewHolder {
@@ -24,8 +25,7 @@ class TracksAdapter(
         val track = tracks[position]
         holder.bind(track)
 
-        val itemView = holder.itemView
-        val app = itemView.context.applicationContext as App
-        itemView.setOnClickListener { app.searchHistoryDataSource.addTrack(track) }
+        val onClickListener = onClickItemViewListener(track)
+        holder.itemView.setOnClickListener(onClickListener)
     }
 }

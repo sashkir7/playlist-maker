@@ -35,6 +35,8 @@ class SearchHistoryDataSource(
             .apply()
     }
 
+    fun clearAll(): Unit = sharedPrefs.edit().clear().apply()
+
     private fun deserialization(json: String): List<TrackDto> =
         gson.fromJson(json, Array<TrackDto>::class.java).toList()
 
