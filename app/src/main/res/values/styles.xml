@@ -179,17 +179,16 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="AbstractTracksUpdateButtonStyle">
+    <style name="AbstractSecondaryButtonStyle">
         <item name="android:backgroundTint">@color/blackYP</item>
         <item name="android:textColor">@color/whiteAbsolute</item>
     </style>
 
-    <style name="TracksUpdateButtonStyle" parent="AbstractTracksUpdateButtonStyle">
+    <style name="SecondaryButtonStyle" parent="AbstractSecondaryButtonStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">24dp</item>
         <item name="android:fontFamily">@font/ys_display_medium</item>
-        <item name="android:text">@string/update_button</item>
         <item name="android:textAlignment">center</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:textSize">14sp</item>

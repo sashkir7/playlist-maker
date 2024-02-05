@@ -62,7 +62,7 @@
         <item name="android:textColor">@color/whiteAbsolute</item>
     </style>
 
-    <style name="AbstractTracksUpdateButtonStyle">
+    <style name="AbstractSecondaryButtonStyle">
         <item name="android:backgroundTint">@color/whiteAbsolute</item>
         <item name="android:textColor">@color/blackYP</item>
     </style>
