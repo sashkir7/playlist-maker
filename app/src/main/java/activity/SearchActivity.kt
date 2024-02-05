@@ -22,8 +22,8 @@ import api.dtos.TrackDto
 import api.dtos.TracksResponseDto
 import api.service.ITunesClient
 import com.example.playlistmaker.R
-import dataSource.SEARCH_HISTORY_SHARED_PREFERENCES
-import dataSource.SearchHistoryDataSource
+import storage.HISTORY_SHARED_PREFS
+import storage.HistoryStorage
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -36,15 +36,11 @@ class SearchActivity : AppCompatActivity() {
 
     private var lastSearchText = ""
 
-    private val historyDataSource by lazy {
-        SearchHistoryDataSource(
-            getSharedPreferences(SEARCH_HISTORY_SHARED_PREFERENCES, MODE_PRIVATE)
-        )
-    }
+    private val historyStorage by lazy {
+        HistoryStorage(getSharedPreferences(HISTORY_SHARED_PREFS, MODE_PRIVATE)) }
 
     private val tracksAdapter by lazy {
-        TracksAdapter { track -> OnClickListener { historyDataSource.addTrack(track) } }
-    }
+        TracksAdapter { track -> OnClickListener { historyStorage.addTrack(track) } } }
     private val historyAdapter by lazy { TracksAdapter { OnClickListener {} } }
 
     private val backButton by lazy { findViewById<ImageView>(R.id.backButton) }
@@ -154,7 +150,7 @@ class SearchActivity : AppCompatActivity() {
     private fun configureClearHistoryButton(): Unit =
         clearHistoryButton.setOnClickListener {
             historyAdapter.clearAll()
-            historyDataSource.clearAll()
+            historyStorage.clearAll()
             handleHideHistoryTracksState()
         }
 
@@ -221,7 +217,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun handleShowHistoryTracksState() {
-        val tracks = historyDataSource.getHistory()
+        val tracks = historyStorage.getHistory()
         if (tracks.isEmpty()) {
             historyView.visibility = GONE
         } else {

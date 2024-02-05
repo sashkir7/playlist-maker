@@ -1,12 +1,10 @@
-package dataSource
+package storage
 
 import android.content.SharedPreferences
 
-const val SETTINGS_SHARED_PREFERENCES = "SETTINGS"
+const val SETTINGS_SHARED_PREFS = "SETTINGS"
 
-class SettingsDataSource(
-    private val sharedPrefs: SharedPreferences
-) {
+class SettingsStorage(private val sharedPrefs: SharedPreferences) {
 
     companion object {
         private const val DARK_THEME_KEY = "DARK_THEME_ENABLED"
