@@ -28,6 +28,11 @@
         <item name="tint">@color/whiteAbsolute</item>
     </style>
 
+    <style name="ThemeSwitchCompatStyle" parent="SettingsIconStyle">
+        <item name="trackTint">@color/blueYP</item>
+        <item name="thumbTint">@color/blueLightYP</item>
+    </style>
+
     <!-- Override navigation bar styles -->
     <style name="AbstractBackButtonNavigationBarStyle">
         <item name="tint">@color/whiteAbsolute</item>

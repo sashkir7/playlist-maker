@@ -30,7 +30,7 @@
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/themeSwitcher"
-            style="@style/SettingsIconStyle" />
+            style="@style/ThemeSwitchCompatStyle" />
 
     </FrameLayout>
 
