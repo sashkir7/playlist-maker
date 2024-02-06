@@ -6,12 +6,15 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
+import app.App
 import com.example.playlistmaker.R
 
 class SettingsActivity : AppCompatActivity() {
 
     private val backButton by lazy { findViewById<ImageView>(R.id.backButton) }
 
+    private val themeSwitcher by lazy { findViewById<SwitchCompat>(R.id.themeSwitcher) }
     private val shareApplicationButton by lazy { findViewById<View>(R.id.share_app_button) }
     private val supportButton by lazy { findViewById<View>(R.id.support_button) }
     private val agreementButton by lazy { findViewById<View>(R.id.agreement_button) }
@@ -20,15 +23,21 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
+        configureThemeSwitcher()
         configureBackButton()
         configureShareApplicationButton()
         configureWriteToSupportButton()
         configureAgreementButton()
     }
 
-    private fun configureBackButton() {
-        backButton.setOnClickListener { onBackPressed() }
+    private fun configureThemeSwitcher() {
+        themeSwitcher.isChecked = (applicationContext as App).darkThemeEnabled
+        themeSwitcher.setOnCheckedChangeListener { _, isChecked ->
+            (applicationContext as App).switchTheme(isChecked)
+        }
     }
+
+    private fun configureBackButton(): Unit = backButton.setOnClickListener { onBackPressed() }
 
     private fun configureShareApplicationButton() = shareApplicationButton.setOnClickListener {
         val intent = Intent(Intent.ACTION_SEND)
