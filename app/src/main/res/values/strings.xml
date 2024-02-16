@@ -28,4 +28,11 @@
     <string name="you_search">Вы искали</string>
     <string name="reset_history_button">Очистить историю</string>
 
+    <string name="track_country">Страна</string>
+    <string name="track_genre">Жанр</string>
+    <string name="track_year">Год</string>
+    <string name="track_album">Альбом</string>
+    <string name="track_duration">Длительность</string>
+    <string name="track_duration_mock">1:35</string>
+
 </resources>
