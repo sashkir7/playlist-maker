@@ -71,6 +71,6 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun configureTextView(textView: TextView, groupView: View, value: String?) {
         textView.text = value
-        groupView.visibility = if (value == null) GONE else VISIBLE
+        groupView.isVisible = value != null
     }
 }
