@@ -2,8 +2,6 @@ package activity
 
 import android.os.Bundle
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +11,8 @@ import api.dtos.releaseDateYear
 import api.dtos.trackTimeAsString
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
+import utils.cornerRadius
+import utils.isVisible
 
 class PlayerActivity : AppCompatActivity() {
 
@@ -53,6 +53,7 @@ class PlayerActivity : AppCompatActivity() {
     private fun configureTrackCover(url: String) {
         Glide.with(applicationContext)
             .load(url)
+            .cornerRadius(value = 8)
             .placeholder(R.drawable.track_placeholder)
             .into(coverImageView)
     }
