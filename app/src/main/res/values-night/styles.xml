@@ -80,8 +80,21 @@
         <item name="android:textColor">@color/whiteAbsolute</item>
     </style>
 
-    <style name="AbstractTrackIconTitle">
+    <style name="AbstractTrackIconTitleStyle">
         <item name="tint">@color/whiteAbsolute</item>
+    </style>
+
+    <!-- Player view styles -->
+    <style name="AbstractTrackInfoValueTextKeyStyle">
+        <item name="android:textColor">@color/whiteAbsolute</item>
+    </style>
+
+    <style name="AbstractTrackDurationStyle">
+        <item name="android:textColor">@color/whiteAbsolute</item>
+    </style>
+
+    <style name="AbstractTrackPrimaryTitleStyle">
+        <item name="android:textColor">@color/whiteAbsolute</item>
     </style>
 
 </resources>

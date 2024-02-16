@@ -228,14 +228,59 @@
         <item name="android:textSize">11sp</item>
     </style>
 
-    <style name="AbstractTrackIconTitle">
+    <style name="AbstractTrackIconTitleStyle">
         <item name="tint">@color/grayYP</item>
     </style>
 
-    <style name="TrackIconTitle" parent="AbstractTrackIconTitle">
+    <style name="TrackIconTitleStyle" parent="AbstractTrackIconTitleStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center</item>
+    </style>
+
+    <!-- Player view styles -->
+    <style name="TrackInfoTextKeyStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingVertical">8dp</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/grayYP</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="layout_goneMarginBottom">16dp</item>
+    </style>
+
+    <style name="AbstractTrackInfoValueTextKeyStyle">
+        <item name="android:textColor">@color/blackYP</item>
+    </style>
+
+    <style name="TrackInfoValueTextKeyStyle" parent="AbstractTrackInfoValueTextKeyStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+    </style>
+
+    <style name="AbstractTrackDurationStyle">
+        <item name="android:textColor">@color/blackYP</item>
+    </style>
+
+    <style name="TrackDurationStyle" parent="AbstractTrackDurationStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="AbstractTrackPrimaryTitleStyle">
+        <item name="android:textColor">@color/blackYP</item>
+    </style>
+
+    <style name="TrackPrimaryTitleStyle" parent="AbstractTrackPrimaryTitleStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
     </style>
 
 </resources>
