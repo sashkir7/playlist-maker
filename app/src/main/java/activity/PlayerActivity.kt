@@ -16,6 +16,10 @@ import utils.isVisible
 
 class PlayerActivity : AppCompatActivity() {
 
+    companion object {
+        const val EXTRA_TRACK_KEY = "EXTRA_TRACK_KEY"
+    }
+
     private val backButton by lazy { findViewById<ImageView>(R.id.iv_back) }
     private val coverImageView by lazy { findViewById<ImageView>(R.id.iv_trackCover) }
 
@@ -41,7 +45,7 @@ class PlayerActivity : AppCompatActivity() {
         setContentView(R.layout.activity_player)
 
         val track = checkNotNull(intent.extras)
-            .getSerializable(TrackDto::class.java.simpleName) as TrackDto
+            .getSerializable(EXTRA_TRACK_KEY) as TrackDto
 
         configureBackButton()
         configureTrackCover(track.coverArtworkUrl)

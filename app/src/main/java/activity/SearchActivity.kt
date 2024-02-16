@@ -72,7 +72,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun startPlayerActivity(track: TrackDto) {
         val intent = Intent(this, PlayerActivity::class.java)
-        intent.putExtra(TrackDto::class.java.simpleName, track)
+        intent.putExtra(PlayerActivity.EXTRA_TRACK_KEY, track)
         startActivity(intent)
     }
 
