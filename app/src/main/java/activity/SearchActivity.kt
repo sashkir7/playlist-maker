@@ -34,7 +34,7 @@ class SearchActivity : AppCompatActivity() {
 
     companion object {
         private const val SEARCH_VALUE_KEY = "SEARCH_VALUE_KEY"
-        private const val DELAY = 1_500L
+        private const val DELAY = 2_000L
     }
 
     private var lastSearchText = ""
