@@ -26,7 +26,7 @@ class TracksViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(model: TrackDto) {
         trackNameView.text = model.trackName
         artistNameView.text = model.artistName
-        trackTimeView.text = model.trackTimeAsString()
+        trackTimeView.text = model.trackTimeAsString
         loadAndSetTrackImage(model.artworkUrl100)
     }
 

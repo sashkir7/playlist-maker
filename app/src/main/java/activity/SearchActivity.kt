@@ -2,6 +2,7 @@ package activity
 
 import adapter.TracksAdapter
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -37,11 +38,24 @@ class SearchActivity : AppCompatActivity() {
     private var lastSearchText = ""
 
     private val historyStorage by lazy {
-        HistoryStorage(getSharedPreferences(HISTORY_SHARED_PREFS, MODE_PRIVATE)) }
+        HistoryStorage(getSharedPreferences(HISTORY_SHARED_PREFS, MODE_PRIVATE))
+    }
 
     private val tracksAdapter by lazy {
-        TracksAdapter { track -> OnClickListener { historyStorage.addTrack(track) } } }
-    private val historyAdapter by lazy { TracksAdapter { OnClickListener {} } }
+        TracksAdapter { track ->
+            OnClickListener {
+                historyStorage.addTrack(track)
+                startPlayerActivity(track)
+            }
+        }
+    }
+    private val historyAdapter by lazy {
+        TracksAdapter { track ->
+            OnClickListener {
+                startPlayerActivity(track)
+            }
+        }
+    }
 
     private val backButton by lazy { findViewById<ImageView>(R.id.backButton) }
     private val searchEditText by lazy { findViewById<EditText>(R.id.searchEditText) }
@@ -56,21 +70,33 @@ class SearchActivity : AppCompatActivity() {
     private val historyView by lazy { findViewById<View>(R.id.historyTracksView) }
     private val historyRecycler by lazy { findViewById<RecyclerView>(R.id.historyTracksRecycler) }
 
+    private fun startPlayerActivity(track: TrackDto) {
+        val intent = Intent(this, PlayerActivity::class.java)
+        intent.putExtra(PlayerActivity.EXTRA_TRACK_KEY, track)
+        startActivity(intent)
+    }
+
     private val searchEditTextTextWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             if (searchEditText.hasFocus() && s?.isEmpty() == true) {
                 handleShowHistoryTracksState()
-            } else { handleHideHistoryTracksState() }
+            } else {
+                handleHideHistoryTracksState()
+            }
         }
+
         override fun afterTextChanged(s: Editable?) {
             clearSearchButton.visibility = if (s.isNullOrEmpty()) GONE else VISIBLE
         }
     }
 
     private val searchFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
-        if (hasFocus && searchEditText.text.isEmpty()) { handleShowHistoryTracksState() }
-        else { handleHideHistoryTracksState() }
+        if (hasFocus && searchEditText.text.isEmpty()) {
+            handleShowHistoryTracksState()
+        } else {
+            handleHideHistoryTracksState()
+        }
     }
 
     private val searchTracksCallback = object : Callback<TracksResponseDto> {
@@ -79,9 +105,13 @@ class SearchActivity : AppCompatActivity() {
             response: Response<TracksResponseDto>
         ) {
             val tracks: List<TrackDto> = checkNotNull(response.body()).results
-            if (tracks.isEmpty()) { handleEmptyTrackState() }
-            else { handleNotEmptyTrackState(tracks) }
+            if (tracks.isEmpty()) {
+                handleEmptyTrackState()
+            } else {
+                handleNotEmptyTrackState(tracks)
+            }
         }
+
         override fun onFailure(call: Call<TracksResponseDto>, t: Throwable) {
             handleNetworkErrorState()
         }
@@ -89,7 +119,9 @@ class SearchActivity : AppCompatActivity() {
 
     private val searchEditTextActionDoneListener =
         OnEditorActionListener { _, actionId, _ ->
-            if (actionId != EditorInfo.IME_ACTION_DONE) { false }
+            if (actionId != EditorInfo.IME_ACTION_DONE) {
+                false
+            }
             lastSearchText = searchEditText.text.toString()
             searchInItunes()
             true
