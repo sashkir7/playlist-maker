@@ -4,17 +4,17 @@ import adapter.TracksAdapter
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.View.GONE
 import android.view.View.OnClickListener
-import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.TextView.OnEditorActionListener
 import android.widget.TextView.VISIBLE
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,9 +33,11 @@ class SearchActivity : AppCompatActivity() {
 
     companion object {
         private const val SEARCH_VALUE_KEY = "SEARCH_VALUE_KEY"
+        private const val DELAY = 2_000L
     }
 
     private var lastSearchText = ""
+    private val mainThreadHandler = Handler(Looper.getMainLooper())
 
     private val historyStorage by lazy {
         HistoryStorage(getSharedPreferences(HISTORY_SHARED_PREFS, MODE_PRIVATE))
@@ -76,13 +78,19 @@ class SearchActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    private val searchRunnable = Runnable { searchInItunes() }
+
     private val searchEditTextTextWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            mainThreadHandler.removeCallbacks(searchRunnable)
+
             if (searchEditText.hasFocus() && s?.isEmpty() == true) {
                 handleShowHistoryTracksState()
             } else {
                 handleHideHistoryTracksState()
+                lastSearchText = searchEditText.text.toString()
+                mainThreadHandler.postDelayed(searchRunnable, DELAY)
             }
         }
 
@@ -117,16 +125,6 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private val searchEditTextActionDoneListener =
-        OnEditorActionListener { _, actionId, _ ->
-            if (actionId != EditorInfo.IME_ACTION_DONE) {
-                false
-            }
-            lastSearchText = searchEditText.text.toString()
-            searchInItunes()
-            true
-        }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -157,7 +155,6 @@ class SearchActivity : AppCompatActivity() {
         clearSearchButton.setOnClickListener { handleClearState() }
         searchEditText.run {
             addTextChangedListener(searchEditTextTextWatcher)
-            setOnEditorActionListener(searchEditTextActionDoneListener)
             setOnFocusChangeListener(searchFocusChangeListener)
             requestFocus()
         }
