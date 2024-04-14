@@ -34,11 +34,13 @@ class SearchActivity : AppCompatActivity() {
 
     companion object {
         private const val SEARCH_VALUE_KEY = "SEARCH_VALUE_KEY"
-        private const val DELAY = 2_000L
+        private const val DELAY = 1_500L
     }
 
     private var lastSearchText = ""
     private val mainThreadHandler = Handler(Looper.getMainLooper())
+
+    private var isClickOnTrackDetailsAllowed = true
 
     private val historyStorage by lazy {
         HistoryStorage(getSharedPreferences(HISTORY_SHARED_PREFS, MODE_PRIVATE))
@@ -47,15 +49,19 @@ class SearchActivity : AppCompatActivity() {
     private val tracksAdapter by lazy {
         TracksAdapter { track ->
             OnClickListener {
-                historyStorage.addTrack(track)
-                startPlayerActivity(track)
+                if (clickOnTrackDetailsDebounce()) {
+                    historyStorage.addTrack(track)
+                    startPlayerActivity(track)
+                }
             }
         }
     }
     private val historyAdapter by lazy {
         TracksAdapter { track ->
             OnClickListener {
-                startPlayerActivity(track)
+                if (clickOnTrackDetailsDebounce()) {
+                    startPlayerActivity(track)
+                }
             }
         }
     }
@@ -257,5 +263,16 @@ class SearchActivity : AppCompatActivity() {
 
     private fun handleHideHistoryTracksState() {
         historyView.visibility = GONE
+    }
+
+    private fun clickOnTrackDetailsDebounce(): Boolean {
+        val current = isClickOnTrackDetailsAllowed
+        if (isClickOnTrackDetailsAllowed) {
+            isClickOnTrackDetailsAllowed = false
+            mainThreadHandler.postDelayed(
+                { isClickOnTrackDetailsAllowed = true }, DELAY
+            )
+        }
+        return current
     }
 }
