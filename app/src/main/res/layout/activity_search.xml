@@ -45,6 +45,15 @@
             android:visibility="gone" />
     </FrameLayout>
 
+    <ProgressBar
+        android:id="@+id/searchProgressBar"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="140dp"
+        android:indeterminateTint="@color/blueYP"
+        android:visibility="gone" />
+
     <LinearLayout
         android:id="@+id/tracksNotFoundView"
         style="@style/TracksInformationViewStyle">

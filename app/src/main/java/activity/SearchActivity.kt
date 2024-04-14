@@ -15,6 +15,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView.VISIBLE
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -64,6 +65,7 @@ class SearchActivity : AppCompatActivity() {
     private val clearSearchButton by lazy { findViewById<ImageView>(R.id.clearSearchButton) }
     private val updateButton by lazy { findViewById<Button>(R.id.updateButton) }
     private val clearHistoryButton by lazy { findViewById<Button>(R.id.clearHistoryButton) }
+    private val searchProgressBar by lazy { findViewById<ProgressBar>(R.id.searchProgressBar) }
 
     private val tracksRecycler by lazy { findViewById<RecyclerView>(R.id.tracksRecycler) }
     private val tracksNotFoundView by lazy { findViewById<View>(R.id.tracksNotFoundView) }
@@ -88,8 +90,14 @@ class SearchActivity : AppCompatActivity() {
             if (searchEditText.hasFocus() && s?.isEmpty() == true) {
                 handleShowHistoryTracksState()
             } else {
-                handleHideHistoryTracksState()
+                tracksRecycler.visibility = GONE
+                searchProgressBar.visibility = VISIBLE
+                tracksNetworkErrorView.visibility = GONE
+                tracksNotFoundView.visibility = GONE
+
                 lastSearchText = searchEditText.text.toString()
+
+                handleHideHistoryTracksState()
                 mainThreadHandler.postDelayed(searchRunnable, DELAY)
             }
         }
@@ -194,6 +202,7 @@ class SearchActivity : AppCompatActivity() {
         tracksRecycler.visibility = GONE
         tracksNotFoundView.visibility = GONE
         tracksNetworkErrorView.visibility = GONE
+        searchProgressBar.visibility = GONE
 
         searchEditText.text.clear()
         tracksAdapter.clearAll()
@@ -206,6 +215,7 @@ class SearchActivity : AppCompatActivity() {
         tracksNotFoundView.visibility = GONE
         tracksNetworkErrorView.visibility = GONE
         historyView.visibility = GONE
+        searchProgressBar.visibility = GONE
 
         tracksAdapter.setTracks(tracks)
         hideKeyboard()
@@ -216,6 +226,7 @@ class SearchActivity : AppCompatActivity() {
         tracksNotFoundView.visibility = VISIBLE
         tracksNetworkErrorView.visibility = GONE
         historyView.visibility = GONE
+        searchProgressBar.visibility = GONE
 
         tracksAdapter.clearAll()
     }
@@ -225,6 +236,7 @@ class SearchActivity : AppCompatActivity() {
         tracksNotFoundView.visibility = GONE
         tracksNetworkErrorView.visibility = VISIBLE
         historyView.visibility = GONE
+        searchProgressBar.visibility = GONE
 
         searchEditText.text.clear()
         tracksAdapter.clearAll()
@@ -233,6 +245,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun handleShowHistoryTracksState() {
+        searchProgressBar.visibility = GONE
         val tracks = historyStorage.getHistory()
         if (tracks.isEmpty()) {
             historyView.visibility = GONE
