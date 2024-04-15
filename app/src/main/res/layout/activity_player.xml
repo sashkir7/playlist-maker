@@ -71,15 +71,15 @@
         android:layout_height="96dp"
         android:layout_marginBottom="4dp"
         android:src="@drawable/play_icon"
-        app:layout_constraintBottom_toTopOf="@id/tv_trackDurationValue"
+        app:layout_constraintBottom_toTopOf="@id/tv_trackCurrentPosition"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/tv_trackDurationValue"
+        android:id="@+id/tv_trackCurrentPosition"
         style="@style/TrackDurationStyle"
         android:layout_marginBottom="32dp"
-        android:text="@string/track_duration_mock"
+        android:text="@string/track_duration_zero"
         app:layout_constraintBottom_toTopOf="@id/tv_durationKey"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
