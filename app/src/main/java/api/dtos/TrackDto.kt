@@ -16,7 +16,8 @@ data class TrackDto(
     @SerializedName("primaryGenreName") val genreName: String?,
     @SerializedName("country") val country: String?,
     @SerializedName("trackTimeMillis") val trackTimeMillis: Long,
-    @SerializedName("artworkUrl100") val artworkUrl100: String
+    @SerializedName("artworkUrl100") val artworkUrl100: String,
+    @SerializedName("previewUrl") val previewUrl: String
 ) : Serializable {
 
     override fun equals(other: Any?): Boolean {
