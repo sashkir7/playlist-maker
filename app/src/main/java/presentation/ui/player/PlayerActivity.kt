@@ -1,6 +1,5 @@
 package presentation.ui.player
 
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -16,6 +15,8 @@ import api.dtos.releaseDateYear
 import api.dtos.trackTimeAsString
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
+import data.MediaRepositoryImpl
+import domain.api.MediaRepository
 import enums.MediaPlayerState.DEFAULT
 import enums.MediaPlayerState.PAUSED
 import enums.MediaPlayerState.PLAYING
@@ -32,12 +33,14 @@ class PlayerActivity : AppCompatActivity() {
         private const val TRACK_CURRENT_POSITION_DELAY = 250L
     }
 
+    private val mediaRepository: MediaRepository = MediaRepositoryImpl()
+
     private val mainThreadHandler = Handler(Looper.getMainLooper())
     private val updateDurationValueRunnable = object : Runnable {
         override fun run() {
             trackCurrentPosition.text = SimpleDateFormat(
                 "mm:ss", Locale.getDefault()
-            ).format(mediaPlayer.currentPosition)
+            ).format(mediaRepository.currentPosition())
             mainThreadHandler.postDelayed(this, TRACK_CURRENT_POSITION_DELAY)
         }
     }
@@ -66,12 +69,13 @@ class PlayerActivity : AppCompatActivity() {
     private val countryGroup by lazy { findViewById<View>(R.id.gr_country) }
 
     private var playerState = DEFAULT
-    private val mediaPlayer = MediaPlayer()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
 
+        // Здесь должна быть domain-модель вместо dto
+        // Изменения затрагивают не только экран плеера, поэтому оставил комментарий
         val track = checkNotNull(intent.extras)
             .getSerializable(EXTRA_TRACK_KEY) as TrackDto
 
@@ -90,7 +94,7 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer.release()
+        mediaRepository.release()
     }
 
     private fun configureBackButton() = backButton.setOnClickListener { onBackPressed() }
@@ -130,28 +134,27 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun configureMediaPlayer(previewUrl: String) {
-        with(mediaPlayer) {
-            setDataSource(previewUrl)
-            prepareAsync()
-            setOnPreparedListener { playerState = PREPARED }
-            setOnCompletionListener {
+        mediaRepository.prepare(
+            previewUrl = previewUrl,
+            onPrepareListener = { playerState = PREPARED },
+            onCompletionListener = {
                 playerState = PREPARED
                 mainThreadHandler.removeCallbacks(updateDurationValueRunnable)
                 trackCurrentPosition.text = getText(R.string.track_duration_zero)
                 playOrPauseButton.setImageResource(R.drawable.play_icon)
             }
-        }
+        )
     }
 
     private fun pausePlayer() {
-        mediaPlayer.pause()
+        mediaRepository.pause()
         playOrPauseButton.setImageResource(R.drawable.play_icon)
         playerState = PAUSED
         mainThreadHandler.removeCallbacks(updateDurationValueRunnable)
     }
 
     private fun startPlayer() {
-        mediaPlayer.start()
+        mediaRepository.start()
         playOrPauseButton.setImageResource(R.drawable.pause_icon)
         playerState = PLAYING
         mainThreadHandler.post(updateDurationValueRunnable)
