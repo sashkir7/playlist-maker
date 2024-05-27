@@ -1,4 +1,4 @@
-package activity
+package presentation.ui.player
 
 import android.media.MediaPlayer
 import android.os.Bundle

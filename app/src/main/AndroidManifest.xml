@@ -34,7 +34,7 @@
             android:name="activity.MediaActivity"
             android:exported="false" />
         <activity
-            android:name="activity.PlayerActivity"
+            android:name="presentation.ui.player.PlayerActivity"
             android:exported="false" />
     </application>
 
