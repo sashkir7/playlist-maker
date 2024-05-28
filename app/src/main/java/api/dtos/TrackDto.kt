@@ -3,7 +3,6 @@ package api.dtos
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -32,13 +31,3 @@ data class TrackDto(
 val TrackDto.trackTimeAsString: String
     get() = SimpleDateFormat("mm:ss", Locale.getDefault()).format(trackTimeMillis)
 
-val TrackDto.releaseDateYear: Int?
-    get() {
-        val date = releaseDate ?: return null
-        val calendar = Calendar.getInstance()
-        calendar.time = date
-        return calendar.get(Calendar.YEAR)
-    }
-
-val TrackDto.coverArtworkUrl: String
-    get() = artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")

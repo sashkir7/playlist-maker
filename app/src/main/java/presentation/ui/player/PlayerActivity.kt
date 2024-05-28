@@ -10,12 +10,9 @@ import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.appcompat.app.AppCompatActivity
-import api.dtos.TrackDto
-import api.dtos.coverArtworkUrl
-import api.dtos.releaseDateYear
-import api.dtos.trackTimeAsString
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
+import domain.models.Track
 import enums.MediaPlayerState.DEFAULT
 import enums.MediaPlayerState.PAUSED
 import enums.MediaPlayerState.PLAYING
@@ -69,10 +66,8 @@ class PlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
 
-        // Здесь должна быть domain-модель вместо dto
-        // Изменения затрагивают не только экран плеера, поэтому оставил комментарий
         val track = checkNotNull(intent.extras)
-            .getSerializable(EXTRA_TRACK_KEY) as TrackDto
+            .getSerializable(EXTRA_TRACK_KEY) as Track
 
         configureBackButton()
         configureTrackCover(track.coverArtworkUrl)
@@ -112,7 +107,7 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
-    private fun configureTrackInformation(track: TrackDto) {
+    private fun configureTrackInformation(track: Track) {
         trackName.text = track.trackName
         artistName.text = track.artistName
 
