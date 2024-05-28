@@ -1,5 +1,6 @@
 package presentation.ui.player
 
+import Creator
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -15,16 +16,12 @@ import api.dtos.releaseDateYear
 import api.dtos.trackTimeAsString
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
-import data.MediaRepositoryImpl
-import domain.api.MediaRepository
 import enums.MediaPlayerState.DEFAULT
 import enums.MediaPlayerState.PAUSED
 import enums.MediaPlayerState.PLAYING
 import enums.MediaPlayerState.PREPARED
 import utils.cornerRadius
 import utils.isVisible
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
 
@@ -33,14 +30,12 @@ class PlayerActivity : AppCompatActivity() {
         private const val TRACK_CURRENT_POSITION_DELAY = 250L
     }
 
-    private val mediaRepository: MediaRepository = MediaRepositoryImpl()
+    private val interactor = Creator.providePlayerInteractor()
 
     private val mainThreadHandler = Handler(Looper.getMainLooper())
     private val updateDurationValueRunnable = object : Runnable {
         override fun run() {
-            trackCurrentPosition.text = SimpleDateFormat(
-                "mm:ss", Locale.getDefault()
-            ).format(mediaRepository.currentPosition())
+            trackCurrentPosition.text = interactor.currentPosition()
             mainThreadHandler.postDelayed(this, TRACK_CURRENT_POSITION_DELAY)
         }
     }
@@ -94,7 +89,7 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaRepository.release()
+        interactor.release()
     }
 
     private fun configureBackButton() = backButton.setOnClickListener { onBackPressed() }
@@ -134,7 +129,7 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun configureMediaPlayer(previewUrl: String) {
-        mediaRepository.prepare(
+        interactor.prepare(
             previewUrl = previewUrl,
             onPrepareListener = { playerState = PREPARED },
             onCompletionListener = {
@@ -147,14 +142,14 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun pausePlayer() {
-        mediaRepository.pause()
+        interactor.pause()
         playOrPauseButton.setImageResource(R.drawable.play_icon)
         playerState = PAUSED
         mainThreadHandler.removeCallbacks(updateDurationValueRunnable)
     }
 
     private fun startPlayer() {
-        mediaRepository.start()
+        interactor.start()
         playOrPauseButton.setImageResource(R.drawable.pause_icon)
         playerState = PLAYING
         mainThreadHandler.post(updateDurationValueRunnable)
