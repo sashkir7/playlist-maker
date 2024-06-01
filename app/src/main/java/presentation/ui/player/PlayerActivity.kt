@@ -1,6 +1,6 @@
-package activity
+package presentation.ui.player
 
-import android.media.MediaPlayer
+import Creator
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -10,20 +10,15 @@ import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.appcompat.app.AppCompatActivity
-import api.dtos.TrackDto
-import api.dtos.coverArtworkUrl
-import api.dtos.releaseDateYear
-import api.dtos.trackTimeAsString
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
+import domain.models.Track
 import enums.MediaPlayerState.DEFAULT
 import enums.MediaPlayerState.PAUSED
 import enums.MediaPlayerState.PLAYING
 import enums.MediaPlayerState.PREPARED
 import utils.cornerRadius
 import utils.isVisible
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
 
@@ -32,12 +27,12 @@ class PlayerActivity : AppCompatActivity() {
         private const val TRACK_CURRENT_POSITION_DELAY = 250L
     }
 
+    private val interactor = Creator.providePlayerInteractor()
+
     private val mainThreadHandler = Handler(Looper.getMainLooper())
     private val updateDurationValueRunnable = object : Runnable {
         override fun run() {
-            trackCurrentPosition.text = SimpleDateFormat(
-                "mm:ss", Locale.getDefault()
-            ).format(mediaPlayer.currentPosition)
+            trackCurrentPosition.text = interactor.currentPosition()
             mainThreadHandler.postDelayed(this, TRACK_CURRENT_POSITION_DELAY)
         }
     }
@@ -66,14 +61,13 @@ class PlayerActivity : AppCompatActivity() {
     private val countryGroup by lazy { findViewById<View>(R.id.gr_country) }
 
     private var playerState = DEFAULT
-    private val mediaPlayer = MediaPlayer()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
 
         val track = checkNotNull(intent.extras)
-            .getSerializable(EXTRA_TRACK_KEY) as TrackDto
+            .getSerializable(EXTRA_TRACK_KEY) as Track
 
         configureBackButton()
         configureTrackCover(track.coverArtworkUrl)
@@ -90,7 +84,7 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer.release()
+        interactor.release()
     }
 
     private fun configureBackButton() = backButton.setOnClickListener { onBackPressed() }
@@ -113,7 +107,7 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
-    private fun configureTrackInformation(track: TrackDto) {
+    private fun configureTrackInformation(track: Track) {
         trackName.text = track.trackName
         artistName.text = track.artistName
 
@@ -130,28 +124,27 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun configureMediaPlayer(previewUrl: String) {
-        with(mediaPlayer) {
-            setDataSource(previewUrl)
-            prepareAsync()
-            setOnPreparedListener { playerState = PREPARED }
-            setOnCompletionListener {
+        interactor.prepare(
+            previewUrl = previewUrl,
+            onPrepareListener = { playerState = PREPARED },
+            onCompletionListener = {
                 playerState = PREPARED
                 mainThreadHandler.removeCallbacks(updateDurationValueRunnable)
                 trackCurrentPosition.text = getText(R.string.track_duration_zero)
                 playOrPauseButton.setImageResource(R.drawable.play_icon)
             }
-        }
+        )
     }
 
     private fun pausePlayer() {
-        mediaPlayer.pause()
+        interactor.pause()
         playOrPauseButton.setImageResource(R.drawable.play_icon)
         playerState = PAUSED
         mainThreadHandler.removeCallbacks(updateDurationValueRunnable)
     }
 
     private fun startPlayer() {
-        mediaPlayer.start()
+        interactor.start()
         playOrPauseButton.setImageResource(R.drawable.pause_icon)
         playerState = PLAYING
         mainThreadHandler.post(updateDurationValueRunnable)

@@ -24,6 +24,8 @@ import api.dtos.TrackDto
 import api.dtos.TracksResponseDto
 import api.service.ITunesClient
 import com.example.playlistmaker.R
+import domain.models.Track
+import presentation.ui.player.PlayerActivity
 import storage.HISTORY_SHARED_PREFS
 import storage.HistoryStorage
 import retrofit2.Call
@@ -82,7 +84,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun startPlayerActivity(track: TrackDto) {
         val intent = Intent(this, PlayerActivity::class.java)
-        intent.putExtra(PlayerActivity.EXTRA_TRACK_KEY, track)
+        intent.putExtra(PlayerActivity.EXTRA_TRACK_KEY, Track.fromDto(track))
         startActivity(intent)
     }
 
