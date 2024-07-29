@@ -1,4 +1,4 @@
-package storage
+package data.search
 
 import android.content.SharedPreferences
 import api.dtos.TrackDto
@@ -6,7 +6,9 @@ import com.google.gson.Gson
 
 const val HISTORY_SHARED_PREFS = "HISTORY"
 
-class HistoryStorage(private val sharedPrefs: SharedPreferences) {
+class HistoryStorage(
+    private val sharedPrefs: SharedPreferences
+) {
 
     companion object {
         private const val HISTORY_KEY = "HISTORY"

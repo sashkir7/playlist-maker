@@ -1,5 +1,8 @@
-package activity
+package ui.main
 
+import ui.media.MediaActivity
+import ui.search.SearchActivity
+import ui.settings.SettingsActivity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

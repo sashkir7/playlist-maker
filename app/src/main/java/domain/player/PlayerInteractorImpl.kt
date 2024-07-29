@@ -1,7 +1,6 @@
-package domain.impl
+package domain.player
 
-import domain.api.PlayerInteractor
-import domain.api.PlayerRepository
+import data.player.PlayerRepository
 
 class PlayerInteractorImpl(
     private val repository: PlayerRepository

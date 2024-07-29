@@ -1,4 +1,4 @@
-package activity
+package ui.search
 
 import adapter.TracksAdapter
 import android.content.Context
@@ -25,9 +25,9 @@ import api.dtos.TracksResponseDto
 import api.service.ITunesClient
 import com.example.playlistmaker.R
 import domain.models.Track
-import presentation.ui.player.PlayerActivity
-import storage.HISTORY_SHARED_PREFS
-import storage.HistoryStorage
+import ui.player.PlayerActivity
+import data.search.HISTORY_SHARED_PREFS
+import data.search.HistoryStorage
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

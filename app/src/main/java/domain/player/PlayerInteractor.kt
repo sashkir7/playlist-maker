@@ -1,6 +1,6 @@
-package domain.api
+package domain.player
 
-interface PlayerRepository {
+interface PlayerInteractor {
 
     fun prepare(
         previewUrl: String,

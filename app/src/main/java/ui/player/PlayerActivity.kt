@@ -1,6 +1,6 @@
-package presentation.ui.player
+package ui.player
 
-import Creator
+import creator.Creator
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -13,10 +13,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
 import domain.models.Track
-import enums.MediaPlayerState.DEFAULT
-import enums.MediaPlayerState.PAUSED
-import enums.MediaPlayerState.PLAYING
-import enums.MediaPlayerState.PREPARED
+import domain.player.MediaPlayerState.DEFAULT
+import domain.player.MediaPlayerState.PAUSED
+import domain.player.MediaPlayerState.PLAYING
+import domain.player.MediaPlayerState.PREPARED
 import utils.cornerRadius
 import utils.isVisible
 

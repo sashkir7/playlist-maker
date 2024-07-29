@@ -1,4 +1,4 @@
-package activity
+package ui.media
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

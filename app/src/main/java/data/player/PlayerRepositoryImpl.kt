@@ -1,7 +1,6 @@
-package data
+package data.player
 
 import android.media.MediaPlayer
-import domain.api.PlayerRepository
 import java.text.SimpleDateFormat
 import java.util.Locale
 
