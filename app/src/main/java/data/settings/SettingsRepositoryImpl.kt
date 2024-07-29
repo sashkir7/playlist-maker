@@ -4,7 +4,6 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
-import domain.settings.SettingsRepository
 
 class SettingsRepositoryImpl(
     private val sharedPreferences: SharedPreferences

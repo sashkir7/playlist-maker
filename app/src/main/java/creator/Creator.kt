@@ -11,7 +11,7 @@ import data.sharing.ExternalNavigatorImpl
 import domain.player.PlayerInteractorImpl
 import domain.settings.SettingsInteractor
 import domain.settings.SettingsInteractorImpl
-import domain.settings.SettingsRepository
+import data.settings.SettingsRepository
 import domain.sharing.SharingInteractor
 import domain.sharing.SharingInteractorImpl
 

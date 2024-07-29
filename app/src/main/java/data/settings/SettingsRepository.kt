@@ -1,4 +1,4 @@
-package domain.settings
+package data.settings
 
 interface SettingsRepository {
 

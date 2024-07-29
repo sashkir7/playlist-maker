@@ -1,5 +1,7 @@
 package domain.settings
 
+import data.settings.SettingsRepository
+
 class SettingsInteractorImpl(
     private val repository: SettingsRepository
 ) : SettingsInteractor {
