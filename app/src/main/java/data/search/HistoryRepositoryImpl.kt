@@ -1,14 +1,12 @@
 package data.search
 
 import android.content.SharedPreferences
-import api.dtos.TrackDto
+import data.search.network.TrackDto
 import com.google.gson.Gson
 
-const val HISTORY_SHARED_PREFS = "HISTORY"
-
-class HistoryStorage(
-    private val sharedPrefs: SharedPreferences
-) {
+class HistoryRepositoryImpl(
+    private val sharedPreferences: SharedPreferences
+) : HistoryRepository {
 
     companion object {
         private const val HISTORY_KEY = "HISTORY"
@@ -16,26 +14,26 @@ class HistoryStorage(
 
     private val gson = Gson()
 
-    fun getHistory(): List<TrackDto> {
-        val json = sharedPrefs
+    override fun getHistory(): List<TrackDto> {
+        val json = sharedPreferences
             .getString(HISTORY_KEY, null)
             ?: return emptyList()
         return deserialization(json)
     }
 
-    fun addTrack(track: TrackDto) {
+    override fun addTrack(track: TrackDto) {
         val tracks = getHistory().toMutableList()
 
         tracks.remove(track)
         tracks.add(0, track)
         while (tracks.size > 10) { tracks.removeLast() }
 
-        sharedPrefs.edit()
+        sharedPreferences.edit()
             .putString(HISTORY_KEY, serialization(tracks))
             .apply()
     }
 
-    fun clearAll(): Unit = sharedPrefs.edit().clear().apply()
+    override fun clearAll(): Unit = sharedPreferences.edit().clear().apply()
 
     private fun deserialization(json: String): List<TrackDto> =
         gson.fromJson(json, Array<TrackDto>::class.java).toList()

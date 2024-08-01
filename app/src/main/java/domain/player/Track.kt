@@ -1,6 +1,5 @@
-package domain.models
+package domain.player
 
-import api.dtos.TrackDto
 import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -19,21 +18,6 @@ data class Track(
     val artworkUrl100: String,
     val previewUrl: String
 ) : Serializable {
-
-    companion object {
-        fun fromDto(dto: TrackDto) = Track(
-            trackId = dto.trackId,
-            trackName = dto.trackName,
-            artistName = dto.artistName,
-            collectionName = dto.collectionName,
-            releaseDate = dto.releaseDate,
-            genreName = dto.genreName,
-            country = dto.country,
-            trackTimeMillis = dto.trackTimeMillis,
-            artworkUrl100 = dto.artworkUrl100,
-            previewUrl = dto.previewUrl
-        )
-    }
 
     val releaseDateYear: Int?
         get() = with(Calendar.getInstance()) {

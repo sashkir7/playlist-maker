@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
-import domain.models.Track
+import domain.player.Track
 import domain.player.MediaPlayerState.DEFAULT
 import domain.player.MediaPlayerState.PAUSED
 import domain.player.MediaPlayerState.PLAYING

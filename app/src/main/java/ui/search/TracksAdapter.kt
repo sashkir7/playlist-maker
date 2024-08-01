@@ -1,18 +1,17 @@
-package adapter
+package ui.search
 
 import android.view.LayoutInflater
 import android.view.View.OnClickListener
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import api.dtos.TrackDto
 import com.example.playlistmaker.R
-import viewHolder.TracksViewHolder
+import domain.player.Track
 
 class TracksAdapter(
-    private val onClickListener: (track: TrackDto) -> OnClickListener
+    private val onClickListener: (track: Track) -> OnClickListener
 ) : RecyclerView.Adapter<TracksViewHolder>() {
 
-    private var tracks: List<TrackDto> = emptyList()
+    private var tracks: List<Track> = emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TracksViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -28,7 +27,7 @@ class TracksAdapter(
         holder.itemView.setOnClickListener(onClickListener(track))
     }
 
-    fun setTracks(tracks: List<TrackDto>) {
+    fun setTracks(tracks: List<Track>) {
         this.tracks = tracks
         notifyDataSetChanged()
     }
