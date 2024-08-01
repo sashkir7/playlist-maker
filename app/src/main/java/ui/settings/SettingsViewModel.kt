@@ -31,7 +31,7 @@ class SettingsViewModel(
         }
     }
 
-    private var mutableDarkThemeEnabled = MutableLiveData<Boolean>()
+    private val mutableDarkThemeEnabled = MutableLiveData<Boolean>()
     val darkThemeEnabled: LiveData<Boolean>
         get() = mutableDarkThemeEnabled
 

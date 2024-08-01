@@ -10,7 +10,12 @@ import com.example.playlistmaker.R
 
 class SettingsActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: SettingsViewModel
+    private val viewModel by lazy {
+        ViewModelProvider(
+            this,
+            SettingsViewModel.getViewModelFactory()
+        )[SettingsViewModel::class.java]
+    }
 
     private val themeSwitcher by lazy { findViewById<SwitchCompat>(R.id.themeSwitcher) }
     private val backButton by lazy { findViewById<ImageView>(R.id.backButton) }
@@ -21,11 +26,6 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-
-        viewModel = ViewModelProvider(
-            this,
-            SettingsViewModel.getViewModelFactory()
-        )[SettingsViewModel::class.java]
 
         configureThemeSwitcher()
         configureBackButton()
