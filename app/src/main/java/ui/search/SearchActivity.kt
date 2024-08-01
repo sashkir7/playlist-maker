@@ -87,10 +87,7 @@ class SearchActivity : AppCompatActivity() {
             is SearchHistory -> showHistoryList(state.tracks)
             is Loading -> showLoading()
             is SearchedTracks -> showSearchResult(state.tracks)
-
-            is SearchState.SearchError -> {
-                showErrorMessage(state.error)
-            }
+            is SearchState.SearchError -> showErrorMessage()
         }
     }
 
@@ -114,32 +111,9 @@ class SearchActivity : AppCompatActivity() {
         tracksRecycler.visibility = View.VISIBLE
     }
 
-    private fun showErrorMessage(error: String) {
+    private fun showErrorMessage() {
         hideContent()
-        when (error) {
-            "Something went wrong" -> {
-
-            }
-
-            "No Internet connection" -> {
-
-            }
-
-//            NetworkError.EMPTY_RESULT -> {
-//                binding.searchRecycler.visibility = View.GONE
-//                binding.internetProblem.visibility = View.GONE
-//                binding.searchHistoryLayout.visibility = View.GONE
-//                binding.nothingFound.visibility = View.VISIBLE
-//                binding.progressBar.visibility = View.GONE
-//            }
-//            NetworkError.CONNECTION_ERROR -> {
-//                binding.searchRecycler.visibility = View.GONE
-//                binding.nothingFound.visibility = View.GONE
-//                binding.searchHistoryLayout.visibility = View.GONE
-//                binding.internetProblem.visibility = View.VISIBLE
-//                binding.progressBar.visibility = View.GONE
-//            }
-        }
+        tracksNetworkErrorView.isVisible = true
     }
 
     private fun startPlayerActivity(track: Track) {
