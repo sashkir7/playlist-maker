@@ -1,15 +1,13 @@
 package ui.player
 
-import creator.Creator
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
 import domain.models.Track
@@ -22,19 +20,15 @@ import utils.isVisible
 
 class PlayerActivity : AppCompatActivity() {
 
-    companion object {
-        const val EXTRA_TRACK_KEY = "EXTRA_TRACK_KEY"
-        private const val TRACK_CURRENT_POSITION_DELAY = 250L
+    private val viewModel by lazy {
+        ViewModelProvider(
+            this,
+            PlayerViewModel.getViewModelFactory()
+        )[PlayerViewModel::class.java]
     }
 
-    private val interactor = Creator.providePlayerInteractor()
-
-    private val mainThreadHandler = Handler(Looper.getMainLooper())
-    private val updateDurationValueRunnable = object : Runnable {
-        override fun run() {
-            trackCurrentPosition.text = interactor.currentPosition()
-            mainThreadHandler.postDelayed(this, TRACK_CURRENT_POSITION_DELAY)
-        }
+    companion object {
+        const val EXTRA_TRACK_KEY = "EXTRA_TRACK_KEY"
     }
 
     private val backButton by lazy { findViewById<ImageView>(R.id.iv_back) }
@@ -60,11 +54,21 @@ class PlayerActivity : AppCompatActivity() {
     private val country by lazy { findViewById<TextView>(R.id.tv_countryValue) }
     private val countryGroup by lazy { findViewById<View>(R.id.gr_country) }
 
-    private var playerState = DEFAULT
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
+
+        viewModel.currentPosition.observe(this) {
+            trackCurrentPosition.text = it
+        }
+
+        viewModel.playerState.observe(this) {
+            val image = when (checkNotNull(it)) {
+                PLAYING -> R.drawable.pause_icon
+                DEFAULT, PREPARED, PAUSED -> R.drawable.play_icon
+            }
+            playOrPauseButton.setImageResource(image)
+        }
 
         val track = checkNotNull(intent.extras)
             .getSerializable(EXTRA_TRACK_KEY) as Track
@@ -79,12 +83,12 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        pausePlayer()
+        viewModel.pause()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        interactor.release()
+        viewModel.release()
     }
 
     private fun configureBackButton() = backButton.setOnClickListener { onBackPressed() }
@@ -99,9 +103,9 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun configurePlayButton() {
         playOrPauseButton.setOnClickListener {
-            when (playerState) {
-                PLAYING -> pausePlayer()
-                PREPARED, PAUSED -> startPlayer()
+            when (viewModel.playerState.value) {
+                PLAYING -> viewModel.pause()
+                PREPARED, PAUSED -> viewModel.start()
                 else -> showPlayerIsNotPreparedToast()
             }
         }
@@ -123,32 +127,7 @@ class PlayerActivity : AppCompatActivity() {
         groupView.isVisible = value != null
     }
 
-    private fun configureMediaPlayer(previewUrl: String) {
-        interactor.prepare(
-            previewUrl = previewUrl,
-            onPrepareListener = { playerState = PREPARED },
-            onCompletionListener = {
-                playerState = PREPARED
-                mainThreadHandler.removeCallbacks(updateDurationValueRunnable)
-                trackCurrentPosition.text = getText(R.string.track_duration_zero)
-                playOrPauseButton.setImageResource(R.drawable.play_icon)
-            }
-        )
-    }
-
-    private fun pausePlayer() {
-        interactor.pause()
-        playOrPauseButton.setImageResource(R.drawable.play_icon)
-        playerState = PAUSED
-        mainThreadHandler.removeCallbacks(updateDurationValueRunnable)
-    }
-
-    private fun startPlayer() {
-        interactor.start()
-        playOrPauseButton.setImageResource(R.drawable.pause_icon)
-        playerState = PLAYING
-        mainThreadHandler.post(updateDurationValueRunnable)
-    }
+    private fun configureMediaPlayer(previewUrl: String) = viewModel.prepare(previewUrl)
 
     private fun showPlayerIsNotPreparedToast() {
         val text = getText(R.string.media_player_is_not_prepared)

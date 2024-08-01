@@ -25,8 +25,6 @@ object Creator {
         this.application = application
     }
 
-    fun providePlayerRepository(): PlayerRepository = PlayerRepositoryImpl()
-
     fun providePlayerInteractor(): PlayerInteractor =
         PlayerInteractorImpl(repository = providePlayerRepository())
 
@@ -46,4 +44,6 @@ object Creator {
                 MODE_PRIVATE
             )
         )
+
+    private fun providePlayerRepository(): PlayerRepository = PlayerRepositoryImpl()
 }
