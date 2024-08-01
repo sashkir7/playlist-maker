@@ -7,10 +7,8 @@ import data.common.network.RetrofitNetworkClient
 import data.player.PlayerRepositoryImpl
 import domain.player.PlayerInteractor
 import data.player.PlayerRepository
-import data.search.HistoryRepository
-import data.search.HistoryRepositoryImpl
-import data.search.TrackRepository
-import data.search.TrackRepositoryImpl
+import data.search.SearchRepository
+import data.search.SearchRepositoryImpl
 import data.settings.SettingsRepositoryImpl
 import data.sharing.ExternalNavigator
 import data.sharing.ExternalNavigatorImpl
@@ -18,10 +16,8 @@ import domain.player.PlayerInteractorImpl
 import domain.settings.SettingsInteractor
 import domain.settings.SettingsInteractorImpl
 import data.settings.SettingsRepository
-import domain.search.HistoryInteractor
-import domain.search.HistoryInteractorImpl
-import domain.search.TrackInteractor
-import domain.search.TrackInteractorImpl
+import domain.search.SearchInteractor
+import domain.search.SearchInteractorImpl
 import domain.sharing.SharingInteractor
 import domain.sharing.SharingInteractorImpl
 
@@ -39,11 +35,8 @@ object Creator {
     fun providePlayerInteractor(): PlayerInteractor =
         PlayerInteractorImpl(repository = providePlayerRepository())
 
-    fun provideTrackInteractor(): TrackInteractor =
-        TrackInteractorImpl(repository = provideTrackRepository())
-
-    fun provideHistoryInteractor(): HistoryInteractor =
-        HistoryInteractorImpl(repository = provideHistoryRepository())
+    fun provideSearchInteractor(): SearchInteractor =
+        SearchInteractorImpl(repository = provideHistoryRepository())
 
     fun provideSharingInteractor(): SharingInteractor =
         SharingInteractorImpl(provideExternalNavigator())
@@ -54,9 +47,6 @@ object Creator {
     private fun provideExternalNavigator(): ExternalNavigator =
         ExternalNavigatorImpl(application)
 
-    private fun provideTrackRepository(): TrackRepository =
-        TrackRepositoryImpl(networkClient = provideNetworkClient())
-
     private fun provideSettingsRepository(): SettingsRepository =
         SettingsRepositoryImpl(
             sharedPreferences = application.getSharedPreferences(
@@ -64,8 +54,9 @@ object Creator {
             )
         )
 
-    private fun provideHistoryRepository(): HistoryRepository =
-        HistoryRepositoryImpl(
+    private fun provideHistoryRepository(): SearchRepository =
+        SearchRepositoryImpl(
+            networkClient = provideNetworkClient(),
             sharedPreferences = application.getSharedPreferences(
                 HISTORY_SHARED_PREFS, MODE_PRIVATE
             )

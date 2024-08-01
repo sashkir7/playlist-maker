@@ -3,8 +3,6 @@ package ui.search
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.view.View.GONE
 import android.view.View.OnClickListener
@@ -15,21 +13,27 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView.VISIBLE
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import domain.player.Track
 import ui.player.PlayerActivity
+import ui.search.SearchState.Loading
+import ui.search.SearchState.SearchHistory
+import ui.search.SearchState.SearchedTracks
 import utils.isVisible
 
-class SearchHistoryActivity : AppCompatActivity() {
+class SearchActivity : AppCompatActivity() {
 
     companion object {
         private const val SEARCH_VALUE_KEY = "SEARCH_VALUE_KEY"
     }
 
-    private lateinit var viewModel: SearchHistoryViewModel
+    private var searchInputQuery = ""
+
+    private lateinit var viewModel: SearchViewModel
 
     private val tracksAdapter by lazy {
         TracksAdapter { track ->
@@ -58,66 +62,9 @@ class SearchHistoryActivity : AppCompatActivity() {
     private val historyView by lazy { findViewById<View>(R.id.historyTracksView) }
     private val historyRecycler by lazy { findViewById<RecyclerView>(R.id.historyTracksRecycler) }
 
-    private val searchEditTextTextWatcher = object : TextWatcher {
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            if (searchEditText.hasFocus() && s?.isEmpty() == true) {
-//                tracksRecycler.isVisible = false
-//                historyView.isVisible = !viewModel.historyTracks.value.isNullOrEmpty()
-            } else {
-                viewModel.smartSearchTrack(searchEditText.text.toString())
-            }
-        }
-
-        override fun afterTextChanged(s: Editable?) {
-            clearSearchButton.isVisible = !s.isNullOrEmpty()
-        }
-    }
-
-    private val searchFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
-        if (hasFocus && searchEditText.text.isEmpty()) {
-            historyView.isVisible = !viewModel.historyTracks.value.isNullOrEmpty()
-        } else {
-            historyView.isVisible = false
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-
-        viewModel = ViewModelProvider(
-            this,
-            SearchViewModelFactory
-        )[SearchHistoryViewModel::class.java]
-
-        viewModel.isLoading.observe(this) { searchProgressBar.isVisible = it }
-        viewModel.foundedTracks.observe(this) {
-            if (it.isEmpty()) {
-                tracksAdapter.clearAll()
-                tracksRecycler.visibility = GONE
-                tracksNotFoundView.visibility = VISIBLE
-            } else {
-                tracksAdapter.setTracks(it)
-                tracksRecycler.visibility = VISIBLE
-                tracksNotFoundView.visibility = GONE
-                hideKeyboard()
-            }
-            tracksNetworkErrorView.visibility = GONE
-            historyView.visibility = GONE
-        }
-
-        viewModel.historyTracks.observe(this) {
-            if (it.isEmpty()) {
-                historyAdapter.clearAll()
-                historyView.visibility = GONE
-            } else {
-                historyView.visibility = VISIBLE
-                historyAdapter.setTracks(it)
-            }
-            tracksNotFoundView.visibility = GONE
-            tracksNetworkErrorView.visibility = GONE
-        }
 
         configureBackButton()
         configureSearchInput()
@@ -126,6 +73,73 @@ class SearchHistoryActivity : AppCompatActivity() {
 
         configureTracksRecycler()
         configureHistoryRecycler()
+
+        viewModel = ViewModelProvider(
+            this,
+            SearchViewModel.getViewModelFactory()
+        )[SearchViewModel::class.java]
+
+        viewModel.state.observe(this) { render(it) }
+    }
+
+    private fun render(state: SearchState) {
+        when (state) {
+            is SearchHistory -> showHistoryList(state.tracks)
+            is Loading -> showLoading()
+            is SearchedTracks -> showSearchResult(state.tracks)
+
+            is SearchState.SearchError -> {
+                showErrorMessage(state.error)
+            }
+        }
+    }
+
+    private fun showHistoryList(tracks: List<Track>) {
+        hideContent()
+        historyAdapter.setTracks(tracks)
+        if (tracks.isNotEmpty()) {
+            historyView.visibility = View.VISIBLE
+        }
+    }
+
+    private fun showLoading() {
+        hideContent()
+        searchProgressBar.visibility = View.VISIBLE
+    }
+
+    private fun showSearchResult(tracks: List<Track>) {
+        hideContent()
+        tracksAdapter.clearAll()
+        tracksAdapter.setTracks(tracks)
+        tracksRecycler.visibility = View.VISIBLE
+    }
+
+    private fun showErrorMessage(error: String) {
+        hideContent()
+        when (error) {
+            "Something went wrong" -> {
+
+            }
+
+            "No Internet connection" -> {
+
+            }
+
+//            NetworkError.EMPTY_RESULT -> {
+//                binding.searchRecycler.visibility = View.GONE
+//                binding.internetProblem.visibility = View.GONE
+//                binding.searchHistoryLayout.visibility = View.GONE
+//                binding.nothingFound.visibility = View.VISIBLE
+//                binding.progressBar.visibility = View.GONE
+//            }
+//            NetworkError.CONNECTION_ERROR -> {
+//                binding.searchRecycler.visibility = View.GONE
+//                binding.nothingFound.visibility = View.GONE
+//                binding.searchHistoryLayout.visibility = View.GONE
+//                binding.internetProblem.visibility = View.VISIBLE
+//                binding.progressBar.visibility = View.GONE
+//            }
+        }
     }
 
     private fun startPlayerActivity(track: Track) {
@@ -150,15 +164,17 @@ class SearchHistoryActivity : AppCompatActivity() {
     private fun configureSearchInput() {
         clearSearchButton.setOnClickListener { handleClearState() }
         searchEditText.run {
-            addTextChangedListener(searchEditTextTextWatcher)
-            setOnFocusChangeListener(searchFocusChangeListener)
+            doOnTextChanged { text, _, _, _ ->
+                clearSearchButton.visibility = if (text.isNullOrEmpty()) GONE else VISIBLE
+                text?.let { viewModel.searchDebounce(it.toString()) }
+            }
             requestFocus()
         }
     }
 
     private fun configureUpdateButton(): Unit =
         updateButton.setOnClickListener {
-//            searchInItunes()
+            viewModel.search(searchInputQuery)
         }
 
     private fun configureClearHistoryButton(): Unit =
@@ -185,53 +201,13 @@ class SearchHistoryActivity : AppCompatActivity() {
     }
 
     private fun handleClearState() {
-        tracksRecycler.visibility = GONE
-        tracksNotFoundView.visibility = GONE
-        tracksNetworkErrorView.visibility = GONE
-
+        viewModel.clearSearchText()
         searchEditText.text.clear()
-        tracksAdapter.clearAll()
-
+        hideContent()
         hideKeyboard()
     }
 
-    private fun handleNotEmptyTrackState(tracks: List<Track>) {
-        tracksRecycler.visibility = VISIBLE
-        tracksNotFoundView.visibility = GONE
-        tracksNetworkErrorView.visibility = GONE
-        historyView.visibility = GONE
-
-        tracksAdapter.setTracks(tracks)
-        hideKeyboard()
-    }
-
-    private fun handleEmptyTrackState() {
-        tracksRecycler.visibility = GONE
-        tracksNotFoundView.visibility = VISIBLE
-        tracksNetworkErrorView.visibility = GONE
-        historyView.visibility = GONE
-
-        tracksAdapter.clearAll()
-    }
-
-    private fun handleNetworkErrorState() {
-        tracksRecycler.visibility = GONE
-        tracksNotFoundView.visibility = GONE
-        tracksNetworkErrorView.visibility = VISIBLE
-        historyView.visibility = GONE
-
-        searchEditText.text.clear()
-        tracksAdapter.clearAll()
-
-        hideKeyboard()
-    }
-
-    private fun handleShowHistoryTracksState() {
-        val tracks = viewModel.historyTracks.value
-        if (tracks.isNullOrEmpty()) {
-            historyView.visibility = GONE
-        } else {
-            historyView.visibility = VISIBLE
-        }
-    }
+    private fun hideContent() = listOf(
+        tracksRecycler, historyView, searchProgressBar, tracksNotFoundView, tracksNetworkErrorView
+    ).forEach { it.isVisible = false }
 }

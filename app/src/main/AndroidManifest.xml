@@ -29,7 +29,7 @@
             android:name="ui.settings.SettingsActivity"
             android:exported="false" />
         <activity
-            android:name="ui.search.SearchHistoryActivity"
+            android:name="ui.search.SearchActivity"
             android:exported="false" />
         <activity
             android:name="ui.media.MediaActivity"

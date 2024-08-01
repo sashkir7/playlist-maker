@@ -1,18 +1,28 @@
 package domain.search
 
 import data.common.network.Resource
-import data.search.TrackRepository
+import data.search.SearchRepository
+import data.search.network.TrackDto
+import domain.player.Track
 import java.util.concurrent.Executors
 
-class TrackInteractorImpl(
-    private val repository: TrackRepository
-) : TrackInteractor {
+class SearchInteractorImpl(
+    private val repository: SearchRepository
+) : SearchInteractor {
 
     private val executor = Executors.newCachedThreadPool()
 
+    override fun getHistory(): List<Track> =
+        repository.getHistory().map { it.toModel() }
+
+    override fun addTrack(track: Track) =
+        repository.addTrack(TrackDto.fromModel(track))
+
+    override fun clearAll() = repository.clearAll()
+
     override fun searchTrack(
         expression: String,
-        consumer: TrackInteractor.Consumer
+        consumer: SearchInteractor.Consumer
     ) = executor.execute {
         when (val resource = repository.searchTrack(expression)) {
             is Resource.Success -> consumer.consume(

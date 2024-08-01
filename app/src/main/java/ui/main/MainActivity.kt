@@ -1,7 +1,7 @@
 package ui.main
 
 import ui.media.MediaActivity
-import ui.search.SearchHistoryActivity
+import ui.search.SearchActivity
 import ui.settings.SettingsActivity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun configureSearchButton() = searchButton.setOnClickListener {
-        startActivity(Intent(this, SearchHistoryActivity::class.java))
+        startActivity(Intent(this, SearchActivity::class.java))
     }
 
     private fun configureMediaButton() = mediaButton.setOnClickListener {
