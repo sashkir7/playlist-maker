@@ -11,10 +11,10 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
 import domain.player.Track
-import domain.player.MediaPlayerState.DEFAULT
-import domain.player.MediaPlayerState.PAUSED
-import domain.player.MediaPlayerState.PLAYING
-import domain.player.MediaPlayerState.PREPARED
+import ui.player.PlayerState.Default
+import ui.player.PlayerState.Paused
+import ui.player.PlayerState.Playing
+import ui.player.PlayerState.Prepared
 import utils.cornerRadius
 import utils.isVisible
 
@@ -58,17 +58,7 @@ class PlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
 
-        viewModel.currentPosition.observe(this) {
-            trackCurrentPosition.text = it
-        }
-
-        viewModel.playerState.observe(this) {
-            val image = when (checkNotNull(it)) {
-                PLAYING -> R.drawable.pause_icon
-                DEFAULT, PREPARED, PAUSED -> R.drawable.play_icon
-            }
-            playOrPauseButton.setImageResource(image)
-        }
+        viewModel.state.observe(this) { render(it) }
 
         val track = checkNotNull(intent.extras)
             .getSerializable(EXTRA_TRACK_KEY) as Track
@@ -79,6 +69,21 @@ class PlayerActivity : AppCompatActivity() {
 
         configurePlayButton()
         configureMediaPlayer(track.previewUrl)
+    }
+
+    private fun render(state: PlayerState) {
+        when (state) {
+            is Default, Paused -> playOrPauseButton.setImageResource(R.drawable.play_icon)
+            is Prepared -> {
+                playOrPauseButton.setImageResource(R.drawable.play_icon)
+                trackCurrentPosition.text = getString(R.string.track_duration_zero)
+            }
+
+            is Playing -> {
+                playOrPauseButton.setImageResource(R.drawable.pause_icon)
+                trackCurrentPosition.text = state.currentPosition
+            }
+        }
     }
 
     override fun onPause() {
@@ -103,9 +108,9 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun configurePlayButton() {
         playOrPauseButton.setOnClickListener {
-            when (viewModel.playerState.value) {
-                PLAYING -> viewModel.pause()
-                PREPARED, PAUSED -> viewModel.start()
+            when (viewModel.state.value) {
+                is Playing -> viewModel.pause()
+                is Prepared, Paused -> viewModel.start()
                 else -> showPlayerIsNotPreparedToast()
             }
         }

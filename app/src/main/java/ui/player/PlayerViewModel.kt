@@ -10,14 +10,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.R
 import creator.Creator
-import domain.player.MediaPlayerState
-import domain.player.MediaPlayerState.DEFAULT
-import domain.player.MediaPlayerState.PAUSED
-import domain.player.MediaPlayerState.PLAYING
-import domain.player.MediaPlayerState.PREPARED
 import domain.player.PlayerInteractor
+import ui.player.PlayerState.Default
+import ui.player.PlayerState.Paused
+import ui.player.PlayerState.Playing
+import ui.player.PlayerState.Prepared
 
 class PlayerViewModel(
     private val application: Application,
@@ -39,27 +37,25 @@ class PlayerViewModel(
     private val mainThreadHandler = Handler(Looper.getMainLooper())
     private val updateCurrentPositionRunnable = object : Runnable {
         override fun run() {
-            mutableCurrentPosition.postValue(interactor.currentPosition())
+            mutableState.postValue(Playing(interactor.currentPosition()))
             mainThreadHandler.postDelayed(this, TRACK_CURRENT_POSITION_DELAY)
         }
     }
 
-    private val mutableCurrentPosition =
-        MutableLiveData(application.getString(R.string.track_duration_zero))
-    val currentPosition: LiveData<String>
-        get() = mutableCurrentPosition
+    private val mutableState = MutableLiveData<PlayerState>()
+    val state: LiveData<PlayerState>
+        get() = mutableState
 
-    private val mutablePlayerState = MutableLiveData(DEFAULT)
-    val playerState: LiveData<MediaPlayerState>
-        get() = mutablePlayerState
+    init {
+        mutableState.postValue(Default)
+    }
 
     fun prepare(previewUrl: String) {
         interactor.prepare(
             previewUrl = previewUrl,
-            onPrepareListener = { mutablePlayerState.postValue(PREPARED) },
+            onPrepareListener = { mutableState.postValue(Prepared) },
             onCompletionListener = {
-                mutablePlayerState.postValue(PREPARED)
-                mutableCurrentPosition.postValue(application.getString(R.string.track_duration_zero))
+                mutableState.postValue(Prepared)
                 mainThreadHandler.removeCallbacks(updateCurrentPositionRunnable)
             }
         )
@@ -67,13 +63,13 @@ class PlayerViewModel(
 
     fun start() {
         interactor.start()
-        mutablePlayerState.postValue(PLAYING)
+        mutableState.postValue(Playing(interactor.currentPosition()))
         mainThreadHandler.post(updateCurrentPositionRunnable)
     }
 
     fun pause() {
         interactor.pause()
-        mutablePlayerState.postValue(PAUSED)
+        mutableState.postValue(Paused)
         mainThreadHandler.removeCallbacks(updateCurrentPositionRunnable)
     }
 
