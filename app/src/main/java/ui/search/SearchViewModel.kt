@@ -64,10 +64,7 @@ class SearchViewModel(
         SearchHistory(interactor.getHistory())
     )
 
-    fun addTrackToHistory(track: Track) {
-        interactor.addTrack(track)
-        mutableState.postValue(SearchHistory(interactor.getHistory()))
-    }
+    fun addTrackToHistory(track: Track) = interactor.addTrack(track)
 
     fun searchDebounce(changedText: String) {
         if (latestSearchText == changedText) return
