@@ -5,17 +5,12 @@ import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
-import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.R
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : AppCompatActivity() {
 
-    private val viewModel by lazy {
-        ViewModelProvider(
-            this,
-            SettingsViewModel.getViewModelFactory()
-        )[SettingsViewModel::class.java]
-    }
+    private val viewModel: SettingsViewModel by viewModel()
 
     private val themeSwitcher by lazy { findViewById<SwitchCompat>(R.id.themeSwitcher) }
     private val backButton by lazy { findViewById<ImageView>(R.id.backButton) }

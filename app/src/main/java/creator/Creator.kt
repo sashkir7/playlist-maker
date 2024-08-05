@@ -26,7 +26,6 @@ object Creator {
     private lateinit var application: Application
 
     private const val HISTORY_SHARED_PREFS = "HISTORY"
-    private const val SETTINGS_SHARED_PREFS = "SETTINGS"
 
     fun initState(application: Application) {
         this.application = application
@@ -37,22 +36,6 @@ object Creator {
 
     fun provideSearchInteractor(): SearchInteractor =
         SearchInteractorImpl(repository = provideHistoryRepository())
-
-    fun provideSharingInteractor(): SharingInteractor =
-        SharingInteractorImpl(provideExternalNavigator())
-
-    fun provideSettingsInteractor(): SettingsInteractor =
-        SettingsInteractorImpl(provideSettingsRepository())
-
-    private fun provideExternalNavigator(): ExternalNavigator =
-        ExternalNavigatorImpl(application)
-
-    private fun provideSettingsRepository(): SettingsRepository =
-        SettingsRepositoryImpl(
-            sharedPreferences = application.getSharedPreferences(
-                SETTINGS_SHARED_PREFS, MODE_PRIVATE
-            )
-        )
 
     private fun provideHistoryRepository(): SearchRepository =
         SearchRepositoryImpl(
