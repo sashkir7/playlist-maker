@@ -2,6 +2,7 @@ package app
 
 import android.app.Application
 import creator.Creator
+import di.playerModule
 import di.settingsModule
 import domain.settings.SettingsInteractor
 import org.koin.android.ext.android.inject
@@ -17,7 +18,7 @@ class App : Application() {
 
         startKoin {
             androidContext(this@App)
-            modules(settingsModule)
+            modules(settingsModule, playerModule)
         }
 
         Creator.initState(this)

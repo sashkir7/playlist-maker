@@ -31,9 +31,6 @@ object Creator {
         this.application = application
     }
 
-    fun providePlayerInteractor(): PlayerInteractor =
-        PlayerInteractorImpl(repository = providePlayerRepository())
-
     fun provideSearchInteractor(): SearchInteractor =
         SearchInteractorImpl(repository = provideHistoryRepository())
 
@@ -44,8 +41,6 @@ object Creator {
                 HISTORY_SHARED_PREFS, MODE_PRIVATE
             )
         )
-
-    private fun providePlayerRepository(): PlayerRepository = PlayerRepositoryImpl()
 
     private fun provideNetworkClient(): NetworkClient = RetrofitNetworkClient(application)
 }
