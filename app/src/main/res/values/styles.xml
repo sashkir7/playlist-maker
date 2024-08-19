@@ -281,4 +281,19 @@
         <item name="android:fontFamily">@font/ys_display_medium</item>
     </style>
 
+    <!-- Media view styles -->
+    <style name="AbstractTabLayoutStyle">
+        <item name="android:background">@color/whiteAbsolute</item>
+        <item name="tabTextColor">@color/blackYP</item>
+        <item name="tabIndicatorColor">@color/blackYP</item>
+    </style>
+
+    <style name="TabLayoutStyle" parent="AbstractTabLayoutStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="tabIndicatorFullWidth">false</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+    </style>
+
 </resources>

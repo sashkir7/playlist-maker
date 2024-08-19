@@ -93,4 +93,11 @@
         <item name="android:textColor">@color/whiteAbsolute</item>
     </style>
 
+    <!-- Media view styles -->
+    <style name="AbstractTabLayoutStyle">
+        <item name="android:background">@color/blackYP</item>
+        <item name="tabTextColor">@color/whiteAbsolute</item>
+        <item name="tabIndicatorColor">@color/whiteAbsolute</item>
+    </style>
+
 </resources>
