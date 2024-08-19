@@ -145,14 +145,11 @@
         <item name="android:visibility">gone</item>
     </style>
 
-    <style name="AbstractTracksNotFoundImageViewStyle">
-        <item name="android:src">@drawable/tracks_not_found_light</item>
-    </style>
-
-    <style name="TracksNotFoundImageViewStyle" parent="AbstractTracksNotFoundImageViewStyle">
+    <style name="TracksNotFoundImageViewStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center</item>
+        <item name="android:src">@drawable/tracks_not_found</item>
     </style>
 
     <style name="AbstractTracksNetworkErrorImageViewStyle">
