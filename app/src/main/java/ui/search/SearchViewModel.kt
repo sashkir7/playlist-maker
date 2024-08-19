@@ -6,9 +6,6 @@ import android.os.SystemClock
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import creator.Creator
 import domain.player.Track
 import domain.search.SearchInteractor
 import ui.search.SearchState.Loading
@@ -23,10 +20,6 @@ class SearchViewModel(
     companion object {
         private val searchRequestToken = Any()
         private const val SEARCH_DEBOUNCE_DELAY = 2_000L
-
-        fun getViewModelFactory() = viewModelFactory {
-            initializer { SearchViewModel(Creator.provideSearchInteractor()) }
-        }
     }
 
     private var latestSearchText: String? = null

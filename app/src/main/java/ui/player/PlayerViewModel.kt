@@ -1,16 +1,10 @@
 package ui.player
 
-import android.app.Application
 import android.os.Handler
 import android.os.Looper
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import creator.Creator
+import androidx.lifecycle.ViewModel
 import domain.player.PlayerInteractor
 import ui.player.PlayerState.Default
 import ui.player.PlayerState.Paused
@@ -18,20 +12,11 @@ import ui.player.PlayerState.Playing
 import ui.player.PlayerState.Prepared
 
 class PlayerViewModel(
-    private val application: Application,
     private val interactor: PlayerInteractor
-) : AndroidViewModel(application) {
+) : ViewModel() {
 
     companion object {
         private const val TRACK_CURRENT_POSITION_DELAY = 250L
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                PlayerViewModel(
-                    application = this[APPLICATION_KEY] as Application,
-                    interactor = Creator.providePlayerInteractor()
-                )
-            }
-        }
     }
 
     private val mainThreadHandler = Handler(Looper.getMainLooper())

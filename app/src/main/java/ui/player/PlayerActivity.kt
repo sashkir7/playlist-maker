@@ -7,10 +7,10 @@ import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
 import domain.player.Track
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ui.player.PlayerState.Default
 import ui.player.PlayerState.Paused
 import ui.player.PlayerState.Playing
@@ -20,12 +20,7 @@ import utils.isVisible
 
 class PlayerActivity : AppCompatActivity() {
 
-    private val viewModel by lazy {
-        ViewModelProvider(
-            this,
-            PlayerViewModel.getViewModelFactory()
-        )[PlayerViewModel::class.java]
-    }
+    private val viewModel: PlayerViewModel by viewModel()
 
     companion object {
         const val EXTRA_TRACK_KEY = "EXTRA_TRACK_KEY"

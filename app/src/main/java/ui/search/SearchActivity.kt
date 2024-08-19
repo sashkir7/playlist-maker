@@ -14,11 +14,11 @@ import android.widget.ProgressBar
 import android.widget.TextView.VISIBLE
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doOnTextChanged
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import domain.player.Track
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ui.player.PlayerActivity
 import ui.search.SearchState.Loading
 import ui.search.SearchState.SearchHistory
@@ -32,8 +32,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private var searchInputQuery = ""
-
-    private lateinit var viewModel: SearchViewModel
+    private val viewModel: SearchViewModel by viewModel()
 
     private val tracksAdapter by lazy {
         TracksAdapter { track ->
@@ -73,11 +72,6 @@ class SearchActivity : AppCompatActivity() {
 
         configureTracksRecycler()
         configureHistoryRecycler()
-
-        viewModel = ViewModelProvider(
-            this,
-            SearchViewModel.getViewModelFactory()
-        )[SearchViewModel::class.java]
 
         viewModel.state.observe(this) { render(it) }
     }
