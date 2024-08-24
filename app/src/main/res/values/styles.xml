@@ -145,14 +145,11 @@
         <item name="android:visibility">gone</item>
     </style>
 
-    <style name="AbstractTracksNotFoundImageViewStyle">
-        <item name="android:src">@drawable/tracks_not_found_light</item>
-    </style>
-
-    <style name="TracksNotFoundImageViewStyle" parent="AbstractTracksNotFoundImageViewStyle">
+    <style name="TracksNotFoundImageViewStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">center</item>
+        <item name="android:src">@drawable/tracks_not_found</item>
     </style>
 
     <style name="AbstractTracksNetworkErrorImageViewStyle">
@@ -281,6 +278,21 @@
     <style name="TrackPrimaryTitleStyle" parent="AbstractTrackPrimaryTitleStyle">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+    </style>
+
+    <!-- Media view styles -->
+    <style name="AbstractTabLayoutStyle">
+        <item name="android:background">@color/whiteAbsolute</item>
+        <item name="tabTextColor">@color/blackYP</item>
+        <item name="tabIndicatorColor">@color/blackYP</item>
+    </style>
+
+    <style name="TabLayoutStyle" parent="AbstractTabLayoutStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="tabIndicatorFullWidth">false</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAllCaps">false</item>
         <item name="android:fontFamily">@font/ys_display_medium</item>
     </style>
 
