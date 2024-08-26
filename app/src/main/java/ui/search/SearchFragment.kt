@@ -65,6 +65,17 @@ class SearchFragment : Fragment() {
         viewModel.state.observe(viewLifecycleOwner) { render(it) }
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(SEARCH_VALUE_KEY, searchInputQuery)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        val searchValue = savedInstanceState?.getString(SEARCH_VALUE_KEY) ?: ""
+        binding.searchEditText.setText(searchValue)
+    }
+
     private fun render(state: SearchState) {
         when (state) {
             is SearchHistory -> showHistoryList(state.tracks)
@@ -105,21 +116,11 @@ class SearchFragment : Fragment() {
         startActivity(intent)
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString(SEARCH_VALUE_KEY, binding.searchEditText.text.toString())
-    }
-
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-        val searchValue = savedInstanceState?.getString(SEARCH_VALUE_KEY) ?: ""
-        binding.searchEditText.setText(searchValue)
-    }
-
     private fun configureSearchInput() {
         val clearSearchButton = binding.clearSearchButton
         clearSearchButton.setOnClickListener { handleClearState() }
         binding.searchEditText.run {
+            searchInputQuery = text.toString()
             doOnTextChanged { text, _, _, _ ->
                 clearSearchButton.isVisible = if (text.isNullOrEmpty()) false else true
                 text?.let { viewModel.searchDebounce(it.toString()) }
