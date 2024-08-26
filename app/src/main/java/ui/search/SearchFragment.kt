@@ -1,7 +1,6 @@
 package ui.search
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +9,9 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
 import domain.player.Track
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -110,11 +111,12 @@ class SearchFragment : Fragment() {
         binding.tracksNetworkErrorView.isVisible = true
     }
 
-    private fun startPlayerActivity(track: Track) {
-        val intent = Intent(requireActivity(), PlayerActivity::class.java)
-        intent.putExtra(PlayerActivity.EXTRA_TRACK_KEY, track)
-        startActivity(intent)
-    }
+    private fun startPlayerActivity(
+        track: Track
+    ) = findNavController().navigate(
+        resId = R.id.action_searchFragment_to_playerActivity,
+        args = PlayerActivity.createArgs(track)
+    )
 
     private fun configureSearchInput() {
         val clearSearchButton = binding.clearSearchButton
