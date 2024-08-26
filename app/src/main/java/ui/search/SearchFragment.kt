@@ -124,7 +124,6 @@ class SearchFragment : Fragment() {
                 clearSearchButton.isVisible = if (text.isNullOrEmpty()) false else true
                 text?.let { viewModel.searchDebounce(it.toString()) }
             }
-            requestFocus()
         }
     }
 
