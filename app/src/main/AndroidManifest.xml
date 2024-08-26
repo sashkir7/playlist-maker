@@ -26,9 +26,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="ui.settings.SettingsActivity"
-            android:exported="false" />
-        <activity
             android:name="ui.player.PlayerActivity"
             android:exported="false" />
     </application>
