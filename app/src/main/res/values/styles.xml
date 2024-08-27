@@ -296,4 +296,16 @@
         <item name="android:fontFamily">@font/ys_display_medium</item>
     </style>
 
+    <!-- Bottom navigation view styles -->
+    <style name="AbstractBottomNavigationStyle">
+        <item name="android:background">@color/whiteAbsolute</item>
+    </style>
+
+    <style name="BottomNavigationStyle" parent="AbstractBottomNavigationStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="itemIconTint">@drawable/bottom_nav_icon_selector</item>
+        <item name="itemTextColor">@drawable/bottom_nav_icon_selector</item>
+    </style>
+
 </resources>

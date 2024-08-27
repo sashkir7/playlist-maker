@@ -1,46 +1,36 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/MainActivityStyle">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ui.main.MainActivity">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/icon_12">
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/container_view"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
 
-        <TextView
-            style="@style/MainActivityTitleStyle"
-            android:text="@string/app_name" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/navigation_graph" />
 
-    </FrameLayout>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        style="@style/BottomNavigationStyle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_navigation_menu">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginHorizontal="@dimen/icon_16"
-        android:layout_marginTop="@dimen/icon_24"
-        android:layout_marginBottom="@dimen/icon_28"
-        android:orientation="vertical">
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:dividerColor="@color/grayLightYP" />
 
-        <Button
-            android:id="@+id/search_button"
-            style="@style/MenuButtonStyle"
-            android:text="@string/search_button"
-            app:icon="@drawable/search_icon" />
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
 
-        <Button
-            android:id="@+id/media_button"
-            style="@style/MenuButtonStyle"
-            android:layout_marginTop="@dimen/icon_16"
-            android:text="@string/media_button"
-            app:icon="@drawable/media_icon" />
-
-        <Button
-            android:id="@+id/settings_button"
-            style="@style/MenuButtonStyle"
-            android:layout_marginTop="@dimen/icon_16"
-            android:text="@string/settings_button"
-            app:icon="@drawable/settings_icon" />
-    </LinearLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

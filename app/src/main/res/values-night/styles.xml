@@ -100,4 +100,9 @@
         <item name="tabIndicatorColor">@color/whiteAbsolute</item>
     </style>
 
+    <!-- Bottom navigation view styles -->
+    <style name="AbstractBottomNavigationStyle">
+        <item name="android:background">@color/blackYP</item>
+    </style>
+
 </resources>
