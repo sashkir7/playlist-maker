@@ -9,11 +9,14 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
 import domain.player.Track
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ui.player.PlayerActivity
 import ui.search.SearchState.Loading
@@ -25,23 +28,31 @@ class SearchFragment : Fragment() {
 
     companion object {
         private const val SEARCH_VALUE_KEY = "SEARCH_VALUE_KEY"
+        private const val CLICK_DEBOUNCE_DELAY = 1_000L
     }
 
     private var searchInputQuery = ""
+    private var isClickAllowed = true
+
     private lateinit var binding: FragmentSearchBinding
     private val viewModel: SearchViewModel by viewModel()
+
 
     private val tracksAdapter by lazy {
         TracksAdapter { track ->
             OnClickListener {
-                viewModel.addTrackToHistory(track)
-                startPlayerActivity(track)
+                if (clickDebounce()) {
+                    viewModel.addTrackToHistory(track)
+                    startPlayerActivity(track)
+                }
             }
         }
     }
 
     private val historyAdapter by lazy {
-        TracksAdapter { track -> OnClickListener { startPlayerActivity(track) } }
+        TracksAdapter { track ->
+            OnClickListener { if (clickDebounce()) startPlayerActivity(track) }
+        }
     }
 
     override fun onCreateView(
@@ -128,6 +139,18 @@ class SearchFragment : Fragment() {
                 text?.let { viewModel.searchDebounce(it.toString()) }
             }
         }
+    }
+
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            lifecycleScope.launch {
+                delay(CLICK_DEBOUNCE_DELAY)
+                isClickAllowed = true
+            }
+        }
+        return current
     }
 
     private fun configureUpdateButton() =
