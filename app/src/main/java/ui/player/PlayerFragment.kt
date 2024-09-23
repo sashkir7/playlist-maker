@@ -1,15 +1,18 @@
 package ui.player
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.ActivityPlayerBinding
+import com.example.playlistmaker.databinding.FragmentPlayerBinding
 import domain.player.Track
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ui.player.PlayerState.Default
@@ -19,7 +22,7 @@ import ui.player.PlayerState.Prepared
 import utils.cornerRadius
 import utils.isVisible
 
-class PlayerActivity : AppCompatActivity() {
+class PlayerFragment : Fragment() {
 
     companion object {
         private const val EXTRA_TRACK = "EXTRA_TRACK_KEY"
@@ -29,18 +32,22 @@ class PlayerActivity : AppCompatActivity() {
         ): Bundle = bundleOf(EXTRA_TRACK to track)
     }
 
+    private lateinit var binding: FragmentPlayerBinding
     private val viewModel: PlayerViewModel by viewModel()
-    private lateinit var binding: ActivityPlayerBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentPlayerBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        binding = ActivityPlayerBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        viewModel.state.observe(this) { render(it) }
-
-        val track = checkNotNull(intent.extras)
+        val track = requireArguments()
             .getSerializable(EXTRA_TRACK) as Track
 
         configureBackButton()
@@ -49,6 +56,8 @@ class PlayerActivity : AppCompatActivity() {
 
         configurePlayButton()
         configureMediaPlayer(track.previewUrl)
+
+        viewModel.state.observe(viewLifecycleOwner) { render(it) }
     }
 
     private fun render(state: PlayerState) {
@@ -79,10 +88,12 @@ class PlayerActivity : AppCompatActivity() {
         viewModel.release()
     }
 
-    private fun configureBackButton() = binding.ivBack.setOnClickListener { onBackPressed() }
+    private fun configureBackButton() = binding.ivBack.setOnClickListener {
+        findNavController().popBackStack()
+    }
 
     private fun configureTrackCover(url: String) {
-        Glide.with(applicationContext)
+        Glide.with(requireContext())
             .load(url)
             .cornerRadius(value = 8)
             .placeholder(R.drawable.track_placeholder)
@@ -117,6 +128,6 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun showPlayerIsNotPreparedToast() {
         val text = getText(R.string.media_player_is_not_prepared)
-        Toast.makeText(this, text, LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), text, LENGTH_SHORT).show()
     }
 }

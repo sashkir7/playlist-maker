@@ -18,7 +18,7 @@ import domain.player.Track
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import ui.player.PlayerActivity
+import ui.player.PlayerFragment
 import ui.search.SearchState.Loading
 import ui.search.SearchState.SearchHistory
 import ui.search.SearchState.SearchedTracks
@@ -36,7 +36,6 @@ class SearchFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchBinding
     private val viewModel: SearchViewModel by viewModel()
-
 
     private val tracksAdapter by lazy {
         TracksAdapter { track ->
@@ -125,8 +124,8 @@ class SearchFragment : Fragment() {
     private fun startPlayerActivity(
         track: Track
     ) = findNavController().navigate(
-        resId = R.id.action_searchFragment_to_playerActivity,
-        args = PlayerActivity.createArgs(track)
+        resId = R.id.action_searchFragment_to_playerFragment,
+        args = PlayerFragment.createArgs(track)
     )
 
     private fun configureSearchInput() {
