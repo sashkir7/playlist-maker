@@ -4,13 +4,12 @@ import data.common.network.Resource
 import data.search.SearchRepository
 import data.search.network.TrackDto
 import domain.player.Track
-import java.util.concurrent.Executors
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class SearchInteractorImpl(
     private val repository: SearchRepository
 ) : SearchInteractor {
-
-    private val executor = Executors.newCachedThreadPool()
 
     override fun getHistory(): List<Track> =
         repository.getHistory().map { it.toModel() }
@@ -20,20 +19,12 @@ class SearchInteractorImpl(
 
     override fun clearAll() = repository.clearAll()
 
-    override fun searchTrack(
-        expression: String,
-        consumer: SearchInteractor.Consumer
-    ) = executor.execute {
-        when (val resource = repository.searchTrack(expression)) {
-            is Resource.Success -> consumer.consume(
-                foundTracks = resource.data?.map { it.toModel() },
-                errorMessage = null
-            )
-
-            is Resource.Error -> consumer.consume(
-                foundTracks = null,
-                errorMessage = resource.message
-            )
+    override fun searchTrack(expression: String): Flow<Pair<List<Track>?, String?>> {
+        return repository.searchTrack(expression).map { resource ->
+            when (resource) {
+                is Resource.Success -> Pair(resource.data?.map { it.toModel() }, null)
+                is Resource.Error -> Pair(null, resource.message)
+            }
         }
     }
 }

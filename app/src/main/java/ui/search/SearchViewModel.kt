@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import domain.player.Track
 import domain.search.SearchInteractor
+import kotlinx.coroutines.launch
 import ui.search.SearchState.Loading
 import ui.search.SearchState.SearchError
 import ui.search.SearchState.SearchHistory
@@ -38,17 +39,17 @@ class SearchViewModel(
 
     fun search(expression: String) {
         if (expression.isEmpty()) return
-
         mutableState.postValue(Loading)
-        interactor.searchTrack(expression, object : SearchInteractor.Consumer {
-            override fun consume(foundTracks: List<Track>?, errorMessage: String?) {
-                if (errorMessage == null) {
-                    mutableState.postValue(SearchedTracks(checkNotNull(foundTracks)))
-                } else {
-                    mutableState.postValue(SearchError(errorMessage))
+
+        viewModelScope.launch {
+            interactor.searchTrack(expression)
+                .collect { (foundTracks, errorMessage) ->
+                    val state = if (errorMessage == null) {
+                        SearchedTracks(checkNotNull(foundTracks))
+                    } else { SearchError(errorMessage) }
+                    mutableState.postValue(state)
                 }
-            }
-        })
+        }
     }
 
     fun clearHistory() {

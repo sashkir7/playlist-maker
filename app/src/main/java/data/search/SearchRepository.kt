@@ -2,6 +2,7 @@ package data.search
 
 import data.common.network.Resource
 import data.search.network.TrackDto
+import kotlinx.coroutines.flow.Flow
 
 interface SearchRepository {
 
@@ -13,5 +14,5 @@ interface SearchRepository {
 
     fun searchTrack(
         expression: String
-    ): Resource<List<TrackDto>>
+    ): Flow<Resource<List<TrackDto>>>
 }

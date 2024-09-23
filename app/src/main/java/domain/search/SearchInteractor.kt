@@ -1,6 +1,7 @@
 package domain.search
 
 import domain.player.Track
+import kotlinx.coroutines.flow.Flow
 
 interface SearchInteractor {
 
@@ -10,9 +11,7 @@ interface SearchInteractor {
 
     fun clearAll()
 
-    fun searchTrack(expression: String, consumer: Consumer)
-
-    interface Consumer {
-        fun consume(foundTracks: List<Track>?, errorMessage: String?)
-    }
+    fun searchTrack(
+        expression: String
+    ): Flow<Pair<List<Track>?, String?>>
 }
