@@ -1,29 +1,32 @@
 package ui.search
 
-import android.os.Handler
-import android.os.Looper
-import android.os.SystemClock
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import domain.player.Track
 import domain.search.SearchInteractor
 import ui.search.SearchState.Loading
 import ui.search.SearchState.SearchError
 import ui.search.SearchState.SearchHistory
 import ui.search.SearchState.SearchedTracks
+import utils.debounce
 
 class SearchViewModel(
     private val interactor: SearchInteractor,
 ) : ViewModel() {
 
     companion object {
-        private val searchRequestToken = Any()
         private const val SEARCH_DEBOUNCE_DELAY = 2_000L
     }
 
     private var latestSearchText: String? = null
-    private val handler = Handler(Looper.getMainLooper())
+
+    private val searchDebounceAction = debounce<String>(
+        delayMillis = SEARCH_DEBOUNCE_DELAY,
+        coroutineScope = viewModelScope,
+        useLastParam = true
+    ) { changedText -> search(changedText) }
 
     private val mutableState = MutableLiveData<SearchState>()
     val state: LiveData<SearchState>
@@ -61,12 +64,7 @@ class SearchViewModel(
 
     fun searchDebounce(changedText: String) {
         if (latestSearchText == changedText) return
-
         latestSearchText = changedText
-        handler.removeCallbacksAndMessages(searchRequestToken)
-
-        val searchRunnable = Runnable { search(changedText) }
-        val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY
-        handler.postAtTime(searchRunnable, searchRequestToken, postTime)
+        searchDebounceAction(changedText)
     }
 }
