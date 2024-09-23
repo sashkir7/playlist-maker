@@ -18,8 +18,9 @@ class PlayerInteractorImpl(
 
     override fun pause() = repository.pause()
 
-    override fun currentPosition(): String =
-        repository.currentPosition()
+    override fun currentPosition() = repository.currentPosition()
+
+    override fun isPlaying() = repository.isPlaying()
 
     override fun release() = repository.release()
 }

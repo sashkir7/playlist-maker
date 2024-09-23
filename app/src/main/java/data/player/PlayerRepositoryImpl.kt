@@ -30,5 +30,7 @@ class PlayerRepositoryImpl : PlayerRepository {
     override fun currentPosition(): String =
         dateFormat.format(player.currentPosition)
 
+    override fun isPlaying() = player.isPlaying
+
     override fun release() = player.release()
 }

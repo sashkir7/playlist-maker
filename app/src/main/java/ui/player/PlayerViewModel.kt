@@ -1,11 +1,13 @@
 package ui.player
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import domain.player.PlayerInteractor
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import ui.player.PlayerState.Default
 import ui.player.PlayerState.Paused
 import ui.player.PlayerState.Playing
@@ -16,16 +18,10 @@ class PlayerViewModel(
 ) : ViewModel() {
 
     companion object {
-        private const val TRACK_CURRENT_POSITION_DELAY = 250L
+        private const val TRACK_CURRENT_POSITION_DELAY = 300L
     }
 
-    private val mainThreadHandler = Handler(Looper.getMainLooper())
-    private val updateCurrentPositionRunnable = object : Runnable {
-        override fun run() {
-            mutableState.postValue(Playing(interactor.currentPosition()))
-            mainThreadHandler.postDelayed(this, TRACK_CURRENT_POSITION_DELAY)
-        }
-    }
+    private var timerJob: Job? = null
 
     private val mutableState = MutableLiveData<PlayerState>()
     val state: LiveData<PlayerState>
@@ -41,7 +37,7 @@ class PlayerViewModel(
             onPrepareListener = { mutableState.postValue(Prepared) },
             onCompletionListener = {
                 mutableState.postValue(Prepared)
-                mainThreadHandler.removeCallbacks(updateCurrentPositionRunnable)
+                stopTimer()
             }
         )
     }
@@ -49,14 +45,25 @@ class PlayerViewModel(
     fun start() {
         interactor.start()
         mutableState.postValue(Playing(interactor.currentPosition()))
-        mainThreadHandler.post(updateCurrentPositionRunnable)
+        startTimer()
     }
 
     fun pause() {
         interactor.pause()
+        stopTimer()
         mutableState.postValue(Paused)
-        mainThreadHandler.removeCallbacks(updateCurrentPositionRunnable)
     }
 
     fun release() = interactor.release()
+
+    private fun startTimer() {
+        timerJob = viewModelScope.launch {
+            while (interactor.isPlaying()) {
+                delay(TRACK_CURRENT_POSITION_DELAY)
+                mutableState.postValue(Playing(interactor.currentPosition()))
+            }
+        }
+    }
+
+    private fun stopTimer() = timerJob?.cancel()
 }

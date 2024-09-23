@@ -11,6 +11,7 @@ interface PlayerRepository {
     fun start()
     fun pause()
     fun currentPosition(): String
+    fun isPlaying(): Boolean
     fun release()
 
 }
