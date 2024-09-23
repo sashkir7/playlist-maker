@@ -135,7 +135,7 @@ class SearchFragment : Fragment() {
         binding.searchEditText.run {
             searchInputQuery = text.toString()
             doOnTextChanged { text, _, _, _ ->
-                clearSearchButton.isVisible = if (text.isNullOrEmpty()) false else true
+                clearSearchButton.isVisible = !text.isNullOrEmpty()
                 text?.let { viewModel.searchDebounce(it.toString()) }
             }
         }
