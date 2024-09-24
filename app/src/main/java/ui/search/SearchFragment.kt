@@ -34,7 +34,9 @@ class SearchFragment : Fragment() {
     private var searchInputQuery = ""
     private var isClickAllowed = true
 
-    private lateinit var binding: FragmentSearchBinding
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
+
     private val viewModel: SearchViewModel by viewModel()
 
     private val tracksAdapter by lazy {
@@ -59,7 +61,7 @@ class SearchFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -85,6 +87,11 @@ class SearchFragment : Fragment() {
         super.onViewStateRestored(savedInstanceState)
         val searchValue = savedInstanceState?.getString(SEARCH_VALUE_KEY) ?: ""
         binding.searchEditText.setText(searchValue)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun render(state: SearchState) {
