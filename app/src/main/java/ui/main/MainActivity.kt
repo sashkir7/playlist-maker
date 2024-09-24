@@ -6,6 +6,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.playlistmaker.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import utils.isVisible
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,8 +20,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun configureMenu() {
-        val navHostFragment = supportFragmentManager
+        val hostFragment = supportFragmentManager
             .findFragmentById(R.id.container_view) as NavHostFragment
-        menu.setupWithNavController(navHostFragment.navController)
+        val controller = hostFragment.navController
+
+        menu.setupWithNavController(controller)
+        controller.addOnDestinationChangedListener { _, destination, _ ->
+            menu.isVisible = (destination.id != R.id.playerFragment)
+        }
     }
 }
