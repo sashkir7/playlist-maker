@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.widget.doOnTextChanged
@@ -41,19 +40,15 @@ class SearchFragment : Fragment() {
 
     private val tracksAdapter by lazy {
         TracksAdapter { track ->
-            OnClickListener {
-                if (clickDebounce()) {
-                    viewModel.addTrackToHistory(track)
-                    startPlayerActivity(track)
-                }
+            if (clickDebounce()) {
+                viewModel.addTrackToHistory(track)
+                navigateToPlayer(track)
             }
         }
     }
 
     private val historyAdapter by lazy {
-        TracksAdapter { track ->
-            OnClickListener { if (clickDebounce()) startPlayerActivity(track) }
-        }
+        TracksAdapter { track -> if (clickDebounce()) navigateToPlayer(track) }
     }
 
     override fun onCreateView(
@@ -128,7 +123,7 @@ class SearchFragment : Fragment() {
         binding.tracksNetworkErrorView.isVisible = true
     }
 
-    private fun startPlayerActivity(
+    private fun navigateToPlayer(
         track: Track
     ) = findNavController().navigate(
         resId = R.id.action_searchFragment_to_playerFragment,
