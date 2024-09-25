@@ -7,6 +7,8 @@ import data.common.network.NetworkClient
 import data.common.network.Resource
 import data.search.network.TrackSearchRequestDto
 import data.search.network.TracksResponseDto
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class SearchRepositoryImpl(
     private val networkClient: NetworkClient,
@@ -42,12 +44,12 @@ class SearchRepositoryImpl(
 
     override fun searchTrack(
         expression: String
-    ): Resource<List<TrackDto>> {
+    ): Flow<Resource<List<TrackDto>>> = flow {
         val response = networkClient.doRequest(TrackSearchRequestDto(expression))
-        return when (response.resultCode) {
-            -1 -> Resource.Error(message = "No Internet connection")
-            200 -> Resource.Success(data = (response as TracksResponseDto).results)
-            else -> Resource.Error(message = "Something went wrong")
+        when (response.resultCode) {
+            -1 -> emit(Resource.Error(message = "No Internet connection"))
+            200 -> emit(Resource.Success(data = (response as TracksResponseDto).results))
+            else -> emit(Resource.Error(message = "Something went wrong"))
         }
     }
 

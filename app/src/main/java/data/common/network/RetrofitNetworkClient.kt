@@ -7,6 +7,8 @@ import android.net.NetworkCapabilities.TRANSPORT_ETHERNET
 import android.net.NetworkCapabilities.TRANSPORT_WIFI
 import data.search.network.ITunesService
 import data.search.network.TrackSearchRequestDto
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -25,13 +27,18 @@ class RetrofitNetworkClient(
 
     private val itunesService = retrofit.create(ITunesService::class.java)
 
-    override fun doRequest(dto: Any): Response {
+    override suspend fun doRequest(dto: Any): Response {
         if (!isConnected()) return Response(resultCode = -1)
         if (dto !is TrackSearchRequestDto) return Response(resultCode = 400)
 
-        val response = itunesService.search(dto.expression).execute()
-        return (response.body() ?: Response())
-            .apply { resultCode = response.code() }
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = itunesService.search(dto.expression)
+                response.apply { resultCode = 200 }
+            } catch (e: Throwable) {
+                Response().apply { resultCode = -1 }
+            }
+        }
     }
 
     private fun isConnected(): Boolean {

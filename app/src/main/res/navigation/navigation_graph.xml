@@ -11,8 +11,8 @@
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" >
         <action
-            android:id="@+id/action_searchFragment_to_playerActivity"
-            app:destination="@id/playerActivity" />
+            android:id="@+id/action_searchFragment_to_playerFragment"
+            app:destination="@id/playerFragment" />
     </fragment>
 
     <fragment
@@ -25,10 +25,10 @@
         android:name="ui.settings.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
-    <activity
-        android:id="@+id/playerActivity"
-        android:name="ui.player.PlayerActivity"
+    <fragment
+        android:id="@+id/playerFragment"
+        android:name="ui.player.PlayerFragment"
         android:label="activity_player"
-        tools:layout="@layout/activity_player" />
+        tools:layout="@layout/fragment_player" />
 
 </navigation>

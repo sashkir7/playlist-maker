@@ -4,18 +4,20 @@ import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
 import domain.player.Track
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import ui.player.PlayerActivity
+import ui.player.PlayerFragment
 import ui.search.SearchState.Loading
 import ui.search.SearchState.SearchHistory
 import ui.search.SearchState.SearchedTracks
@@ -25,23 +27,28 @@ class SearchFragment : Fragment() {
 
     companion object {
         private const val SEARCH_VALUE_KEY = "SEARCH_VALUE_KEY"
+        private const val CLICK_DEBOUNCE_DELAY = 1_000L
     }
 
     private var searchInputQuery = ""
-    private lateinit var binding: FragmentSearchBinding
+    private var isClickAllowed = true
+
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
+
     private val viewModel: SearchViewModel by viewModel()
 
     private val tracksAdapter by lazy {
         TracksAdapter { track ->
-            OnClickListener {
+            if (clickDebounce()) {
                 viewModel.addTrackToHistory(track)
-                startPlayerActivity(track)
+                navigateToPlayer(track)
             }
         }
     }
 
     private val historyAdapter by lazy {
-        TracksAdapter { track -> OnClickListener { startPlayerActivity(track) } }
+        TracksAdapter { track -> if (clickDebounce()) navigateToPlayer(track) }
     }
 
     override fun onCreateView(
@@ -49,7 +56,7 @@ class SearchFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentSearchBinding.inflate(inflater, container, false)
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -75,6 +82,11 @@ class SearchFragment : Fragment() {
         super.onViewStateRestored(savedInstanceState)
         val searchValue = savedInstanceState?.getString(SEARCH_VALUE_KEY) ?: ""
         binding.searchEditText.setText(searchValue)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun render(state: SearchState) {
@@ -111,11 +123,11 @@ class SearchFragment : Fragment() {
         binding.tracksNetworkErrorView.isVisible = true
     }
 
-    private fun startPlayerActivity(
+    private fun navigateToPlayer(
         track: Track
     ) = findNavController().navigate(
-        resId = R.id.action_searchFragment_to_playerActivity,
-        args = PlayerActivity.createArgs(track)
+        resId = R.id.action_searchFragment_to_playerFragment,
+        args = PlayerFragment.createArgs(track)
     )
 
     private fun configureSearchInput() {
@@ -124,10 +136,22 @@ class SearchFragment : Fragment() {
         binding.searchEditText.run {
             searchInputQuery = text.toString()
             doOnTextChanged { text, _, _, _ ->
-                clearSearchButton.isVisible = if (text.isNullOrEmpty()) false else true
+                clearSearchButton.isVisible = !text.isNullOrEmpty()
                 text?.let { viewModel.searchDebounce(it.toString()) }
             }
         }
+    }
+
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            lifecycleScope.launch {
+                delay(CLICK_DEBOUNCE_DELAY)
+                isClickAllowed = true
+            }
+        }
+        return current
     }
 
     private fun configureUpdateButton() =
