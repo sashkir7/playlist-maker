@@ -7,7 +7,7 @@ import ui.media.playlists.PlaylistsViewModel
 
 val mediaModule = module {
 
-    viewModel<FavoriteTracksViewModel> { FavoriteTracksViewModel() }
+    viewModel<FavoriteTracksViewModel> { FavoriteTracksViewModel(get()) }
 
     viewModel<PlaylistsViewModel> { PlaylistsViewModel() }
 
