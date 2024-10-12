@@ -1,6 +1,7 @@
 package app
 
 import android.app.Application
+import di.dataModule
 import di.mediaModule
 import di.playerModule
 import di.searchModule
@@ -19,7 +20,7 @@ class App : Application() {
 
         startKoin {
             androidContext(this@App)
-            modules(settingsModule, playerModule, searchModule, mediaModule)
+            modules(settingsModule, playerModule, searchModule, mediaModule, dataModule)
         }
 
         initThemeState()
