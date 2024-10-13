@@ -1,20 +1,15 @@
 package data.player
 
 import data.converters.TrackDbConvertor
-import data.db.AppDatabase
 import data.db.dao.FavoriteTracksDao
 import domain.player.Track
-import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.withContext
 
 class FavoriteRepositoryImpl(
-    database: AppDatabase,
+    private val favoriteDao: FavoriteTracksDao,
     private val convertor: TrackDbConvertor
 ) : FavoriteRepository {
-
-    private val favoriteDao: FavoriteTracksDao = database.favoriteTracksDao()
 
     override suspend fun add(track: Track) =
         favoriteDao.add(convertor.map(track))
@@ -28,7 +23,7 @@ class FavoriteRepositoryImpl(
         favoriteDao.delete(convertor.map(track))
 
     override fun getAll(): Flow<List<Track>> = flow {
-        val tracks = withContext(IO) { favoriteDao.getAll() }
+        val tracks = favoriteDao.getAll()
         emit(tracks.map { convertor.map(it) })
     }
 }

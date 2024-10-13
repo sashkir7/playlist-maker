@@ -14,8 +14,8 @@ class FavoriteTracksViewModel(
     private val interactor: FavoriteInteractor
 ) : ViewModel() {
 
-    private val mutableState = MutableLiveData<FavoriteTracksState>()
-    val state: LiveData<FavoriteTracksState> get() = mutableState
+    private val _state = MutableLiveData<FavoriteTracksState>()
+    val state: LiveData<FavoriteTracksState> get() = _state
 
     fun fillData() = viewModelScope.launch {
         interactor.getAll().collect { tracks -> processResult(tracks) }
@@ -23,9 +23,9 @@ class FavoriteTracksViewModel(
 
     private fun processResult(tracks: List<Track>) {
         if (tracks.isEmpty()) {
-            mutableState.postValue(Empty)
+            _state.postValue(Empty)
         } else {
-            mutableState.postValue(Content(tracks))
+            _state.postValue(Content(tracks))
         }
     }
 }

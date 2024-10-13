@@ -1,5 +1,6 @@
 package di
 
+import data.db.AppDatabase
 import data.player.FavoriteRepository
 import data.player.FavoriteRepositoryImpl
 import data.player.PlayerRepository
@@ -20,5 +21,10 @@ val playerModule = module {
     single<FavoriteInteractor> { FavoriteInteractorImpl(get()) }
 
     single<PlayerRepository> { PlayerRepositoryImpl() }
-    single<FavoriteRepository> { FavoriteRepositoryImpl(get(), get()) }
+    single<FavoriteRepository> {
+        FavoriteRepositoryImpl(
+            favoriteDao = get<AppDatabase>().favoriteTracksDao(),
+            convertor = get()
+        )
+    }
 }
