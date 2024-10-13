@@ -57,9 +57,12 @@ class PlayerFragment : Fragment() {
         configureTrackInformation(track)
 
         configurePlayButton()
+        configureAddToFavoriteButton(track)
         configureMediaPlayer(track.previewUrl)
 
         viewModel.state.observe(viewLifecycleOwner) { render(it) }
+
+        viewModel.init(track)
     }
 
     override fun onDestroyView() {
@@ -69,6 +72,7 @@ class PlayerFragment : Fragment() {
 
     private fun render(state: PlayerState) {
         val playOrPauseButton = binding.ivPlayButton
+        val addToFavoriteButton = binding.ivAddToFavorite
         val trackCurrentPosition = binding.tvTrackCurrentPosition
 
         when (state) {
@@ -81,6 +85,15 @@ class PlayerFragment : Fragment() {
             is Playing -> {
                 playOrPauseButton.setImageResource(R.drawable.pause_icon)
                 trackCurrentPosition.text = state.currentPosition
+            }
+
+            is PlayerState.Favorite -> {
+                val resId = if (state.isFavorite) {
+                    R.drawable.added_track_to_favorite
+                } else {
+                    R.drawable.add_track_to_favorite
+                }
+                addToFavoriteButton.setImageResource(resId)
             }
         }
     }
@@ -130,6 +143,11 @@ class PlayerFragment : Fragment() {
         textView.text = value
         groupView.isVisible = value != null
     }
+
+    private fun configureAddToFavoriteButton(track: Track) =
+        binding.ivAddToFavorite.setOnClickListener {
+            viewModel.onFavoriteClicked(track)
+        }
 
     private fun configureMediaPlayer(previewUrl: String) = viewModel.prepare(previewUrl)
 
