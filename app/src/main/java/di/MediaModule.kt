@@ -3,6 +3,8 @@ package di
 import data.db.AppDatabase
 import data.media.playlists.new.PlaylistRepository
 import data.media.playlists.new.PlaylistRepositoryImpl
+import domain.media.PlaylistInteractor
+import domain.media.PlaylistInteractorImpl
 import domain.media.playlists.new.NewPlaylistInteractor
 import domain.media.playlists.new.NewPlaylistInteractorImpl
 import org.koin.android.ext.koin.androidContext
@@ -16,8 +18,9 @@ val mediaModule = module {
 
     viewModel<FavoriteTracksViewModel> { FavoriteTracksViewModel(get()) }
     viewModel<NewPlaylistViewModel> { NewPlaylistViewModel(get()) }
-    viewModel<PlaylistsViewModel> { PlaylistsViewModel() }
+    viewModel<PlaylistsViewModel> { PlaylistsViewModel(get()) }
 
+    single<PlaylistInteractor> { PlaylistInteractorImpl(get()) }
     single<NewPlaylistInteractor> { NewPlaylistInteractorImpl(get()) }
 
     single<PlaylistRepository> {

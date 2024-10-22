@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="160dp"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="4dp"
+    android:layout_marginBottom="16dp"
+    android:orientation="vertical">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/iv_playlist_cover"
+        style="@style/TrackItemImageStyle"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:scaleType="centerCrop"
+        tools:src="@drawable/track_placeholder" />
+
+    <TextView
+        android:id="@+id/tv_playlist_name"
+        style="@style/TrackTitleStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        tools:text="Best songs 2021" />
+
+    <TextView
+        android:id="@+id/tv_playlist_amount_tracks"
+        style="@style/TrackTitleStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        tools:text="45 tracks" />
+
+</LinearLayout>
