@@ -49,5 +49,10 @@
     <string name="add_new_playlist">Новый плейлист</string>
     <string name="add_new_playlist_name">Название*</string>
     <string name="add_new_playlist_description">Описание</string>
+    <string name="add_new_playlist_dialog_title">Завершить создание плейлиста?</string>
+    <string name="add_new_playlist_dialog_message">Все несохраненные данные будут потеряны</string>
+    <string name="add_new_playlist_dialog_cancel">Отмена</string>
+    <string name="add_new_playlist_dialog_finish">Завершить</string>
+    <string name="add_new_playlist_playlist_created">Плейлист "%1$s" создан!</string>
 
 </resources>
