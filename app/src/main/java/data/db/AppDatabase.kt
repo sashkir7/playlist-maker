@@ -3,12 +3,12 @@ package data.db
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import data.db.dao.FavoriteTracksDao
-import data.db.entity.TrackEntity
+import data.db.entity.FavoriteTrackEntity
 
 @Database(
     version = 1,
     entities = [
-        TrackEntity::class
+        FavoriteTrackEntity::class
     ]
 )
 abstract class AppDatabase : RoomDatabase() {

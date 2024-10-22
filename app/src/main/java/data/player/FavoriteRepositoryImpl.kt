@@ -1,6 +1,6 @@
 package data.player
 
-import data.converters.TrackDbConvertor
+import data.convertors.FavoriteTrackDbConvertor
 import data.db.dao.FavoriteTracksDao
 import domain.player.Track
 import kotlinx.coroutines.flow.Flow
@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.flow
 
 class FavoriteRepositoryImpl(
     private val favoriteDao: FavoriteTracksDao,
-    private val convertor: TrackDbConvertor
+    private val convertor: FavoriteTrackDbConvertor
 ) : FavoriteRepository {
 
     override suspend fun add(track: Track) =
