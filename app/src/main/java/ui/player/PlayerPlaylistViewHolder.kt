@@ -1,14 +1,14 @@
-package ui.media.playlists
+package ui.player
 
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.PlaylistViewBinding
+import com.example.playlistmaker.databinding.PlayerPlaylistViewBinding
 import domain.media.Playlist
 import utils.EndingConvertor
 
-class PlaylistViewHolder(
-    private val binding: PlaylistViewBinding
+class PlayerPlaylistViewHolder(
+    private val binding: PlayerPlaylistViewBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(playlist: Playlist) = with(binding) {
@@ -24,4 +24,5 @@ class PlaylistViewHolder(
         tvPlaylistName.text = playlist.name
         tvPlaylistAmountTracks.text = EndingConvertor.track(playlist.tracks.size)
     }
+
 }

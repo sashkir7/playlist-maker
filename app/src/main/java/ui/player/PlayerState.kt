@@ -1,18 +1,24 @@
 package ui.player
 
-sealed class PlayerState {
+import domain.media.Playlist
 
-    object Default : PlayerState()
+sealed interface PlayerState {
 
-    object Prepared : PlayerState()
+    object Default : PlayerState
+
+    object Prepared : PlayerState
 
     data class Playing(
         val currentPosition: String
-    ) : PlayerState()
+    ) : PlayerState
 
-    object Paused : PlayerState()
+    object Paused : PlayerState
 
     data class Favorite(
         val isFavorite: Boolean
-    ) : PlayerState()
+    ) : PlayerState
+
+    data class GetPlaylists(
+        val playlists: List<Playlist>
+    ) : PlayerState
 }

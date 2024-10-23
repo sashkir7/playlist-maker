@@ -4,18 +4,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlayerBinding
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HIDDEN
 import domain.player.Track
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ui.player.PlayerState.Default
+import ui.player.PlayerState.Favorite
+import ui.player.PlayerState.GetPlaylists
 import ui.player.PlayerState.Paused
 import ui.player.PlayerState.Playing
 import ui.player.PlayerState.Prepared
@@ -37,6 +44,12 @@ class PlayerFragment : Fragment() {
 
     private val viewModel: PlayerViewModel by viewModel()
 
+    private val bottomSheet: BottomSheetBehavior<LinearLayout> by lazy {
+        BottomSheetBehavior.from(binding.playlistsBottomSheet)
+    }
+
+    private val playlistsAdapter by lazy { PlayerPlaylistAdapter() }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -52,13 +65,18 @@ class PlayerFragment : Fragment() {
         val track = requireArguments()
             .getSerializable(EXTRA_TRACK) as Track
 
+        bottomSheet.state = STATE_HIDDEN
+
         configureBackButton()
         configureTrackCover(track.coverArtworkUrl)
         configureTrackInformation(track)
 
         configurePlayButton()
+        configureAddToPlaylistButton()
         configureAddToFavoriteButton(track)
         configureMediaPlayer(track.previewUrl)
+
+        configurePlaylistRecycler()
 
         viewModel.state.observe(viewLifecycleOwner) { render(it) }
 
@@ -87,7 +105,7 @@ class PlayerFragment : Fragment() {
                 trackCurrentPosition.text = state.currentPosition
             }
 
-            is PlayerState.Favorite -> {
+            is Favorite -> {
                 val resId = if (state.isFavorite) {
                     R.drawable.added_track_to_favorite
                 } else {
@@ -95,6 +113,8 @@ class PlayerFragment : Fragment() {
                 }
                 addToFavoriteButton.setImageResource(resId)
             }
+
+            is GetPlaylists -> playlistsAdapter.setPlaylists(state.playlists)
         }
     }
 
@@ -133,8 +153,16 @@ class PlayerFragment : Fragment() {
         binding.tvArtistName.text = track.artistName
 
         binding.tvDurationValue.text = track.trackTimeAsString
-        configureTextView(binding.tvCollectionNameValue, binding.grCollectionName, track.collectionName)
-        configureTextView(binding.tvReleaseDateValue, binding.grReleaseDate, track.releaseDateYear?.toString())
+        configureTextView(
+            binding.tvCollectionNameValue,
+            binding.grCollectionName,
+            track.collectionName
+        )
+        configureTextView(
+            binding.tvReleaseDateValue,
+            binding.grReleaseDate,
+            track.releaseDateYear?.toString()
+        )
         configureTextView(binding.tvGenreNameValue, binding.grGenreName, track.genreName)
         configureTextView(binding.tvCountryValue, binding.grCountry, track.country)
     }
@@ -143,6 +171,12 @@ class PlayerFragment : Fragment() {
         textView.text = value
         groupView.isVisible = value != null
     }
+
+    private fun configureAddToPlaylistButton() =
+        binding.ivAddToPlaylist.setOnClickListener {
+            viewModel.getPlaylists()
+            bottomSheet.state = STATE_COLLAPSED
+        }
 
     private fun configureAddToFavoriteButton(track: Track) =
         binding.ivAddToFavorite.setOnClickListener {
@@ -154,5 +188,10 @@ class PlayerFragment : Fragment() {
     private fun showPlayerIsNotPreparedToast() {
         val text = getText(R.string.media_player_is_not_prepared)
         Toast.makeText(requireContext(), text, LENGTH_SHORT).show()
+    }
+
+    private fun configurePlaylistRecycler() = with(binding.recyclerPlaylists) {
+        adapter = playlistsAdapter
+        layoutManager = LinearLayoutManager(requireContext())
     }
 }
