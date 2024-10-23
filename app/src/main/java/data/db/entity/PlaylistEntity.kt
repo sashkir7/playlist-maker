@@ -13,6 +13,6 @@ data class PlaylistEntity(
     val name: String,
     val description: String?,
     val pathToImage: String?,
-    val trackIds: List<Int>,
+    val trackIds: List<Long>,
     val timestamp: Long
 )

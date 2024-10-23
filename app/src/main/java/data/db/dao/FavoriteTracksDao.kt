@@ -13,7 +13,7 @@ interface FavoriteTracksDao {
     suspend fun add(track: FavoriteTrackEntity)
 
     @Query("SELECT * FROM favorite_tracks WHERE trackId = :id")
-    suspend fun getById(id: Int): FavoriteTrackEntity?
+    suspend fun getById(id: Long): FavoriteTrackEntity?
 
     @Delete
     suspend fun delete(track: FavoriteTrackEntity)

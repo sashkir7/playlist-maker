@@ -21,4 +21,9 @@ sealed interface PlayerState {
     data class GetPlaylists(
         val playlists: List<Playlist>
     ) : PlayerState
+
+    data class AddedTrackToPlaylist(
+        val successfulAdded: Boolean,
+        val playlist: Playlist
+    ) : PlayerState
 }

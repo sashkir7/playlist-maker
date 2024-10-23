@@ -1,4 +1,4 @@
-package data.media.playlists.new
+package data.media.playlists
 
 import android.content.Context
 import android.graphics.Bitmap.CompressFormat.JPEG
@@ -7,8 +7,11 @@ import android.net.Uri
 import android.os.Environment.DIRECTORY_PICTURES
 import androidx.core.net.toUri
 import data.convertors.PlaylistDbConvertor
+import data.convertors.PlaylistTrackDbConvertor
 import data.db.dao.PlaylistDao
+import data.db.dao.PlaylistTracksDao
 import domain.media.Playlist
+import domain.player.Track
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.io.File
@@ -17,15 +20,26 @@ import java.io.FileOutputStream
 class PlaylistRepositoryImpl(
     private val context: Context,
     private val playlistDao: PlaylistDao,
-    private val convertor: PlaylistDbConvertor
+    private val trackDao: PlaylistTracksDao,
+    private val playlistConvertor: PlaylistDbConvertor,
+    private val trackConvertor: PlaylistTrackDbConvertor
 ) : PlaylistRepository {
 
     override suspend fun add(playlist: Playlist) =
-        playlistDao.add(convertor.map(playlist))
+        playlistDao.add(playlistConvertor.map(playlist))
+
+    override suspend fun addPlaylistTrack(track: Track) =
+        trackDao.add(trackConvertor.map(track))
+
+    override suspend fun update(playlist: Playlist) =
+        playlistDao.update(playlistConvertor.map(playlist))
+
+    override suspend fun getById(id: Int): Playlist =
+        playlistConvertor.map(playlistDao.getById(id))
 
     override fun getAll(): Flow<List<Playlist>> = flow {
         val playlists = playlistDao.getAll()
-        emit(playlists.map { convertor.map(it) })
+        emit(playlists.map { playlistConvertor.map(it) })
     }
 
     override fun saveImage(uri: Uri, image: String): String {

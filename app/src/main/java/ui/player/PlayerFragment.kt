@@ -20,6 +20,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPS
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HIDDEN
 import domain.player.Track
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ui.player.PlayerState.AddedTrackToPlaylist
 import ui.player.PlayerState.Default
 import ui.player.PlayerState.Favorite
 import ui.player.PlayerState.GetPlaylists
@@ -39,6 +40,8 @@ class PlayerFragment : Fragment() {
         ): Bundle = bundleOf(EXTRA_TRACK to track)
     }
 
+    private lateinit var track: Track
+
     private var _binding: FragmentPlayerBinding? = null
     private val binding get() = _binding!!
 
@@ -48,7 +51,14 @@ class PlayerFragment : Fragment() {
         BottomSheetBehavior.from(binding.playlistsBottomSheet)
     }
 
-    private val playlistsAdapter by lazy { PlayerPlaylistAdapter() }
+    private val playlistsAdapter by lazy {
+        PlayerPlaylistAdapter { playlist ->
+            viewModel.addToPlaylist(
+                playlistId = checkNotNull(playlist.id),
+                track = track
+            )
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,10 +72,7 @@ class PlayerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val track = requireArguments()
-            .getSerializable(EXTRA_TRACK) as Track
-
-        bottomSheet.state = STATE_HIDDEN
+        track = requireArguments().getSerializable(EXTRA_TRACK) as Track
 
         configureBackButton()
         configureTrackCover(track.coverArtworkUrl)
@@ -76,10 +83,9 @@ class PlayerFragment : Fragment() {
         configureAddToFavoriteButton(track)
         configureMediaPlayer(track.previewUrl)
 
-        configurePlaylistRecycler()
+        configureBottomSheet()
 
         viewModel.state.observe(viewLifecycleOwner) { render(it) }
-
         viewModel.init(track)
     }
 
@@ -115,6 +121,13 @@ class PlayerFragment : Fragment() {
             }
 
             is GetPlaylists -> playlistsAdapter.setPlaylists(state.playlists)
+
+            is AddedTrackToPlaylist -> if (state.successfulAdded) {
+                bottomSheet.state = STATE_HIDDEN
+                showToast(getString(R.string.track_added_to_playlist, state.playlist.name))
+            } else {
+                showToast(getString(R.string.track_dont_added_to_playlist, state.playlist.name))
+            }
         }
     }
 
@@ -144,7 +157,7 @@ class PlayerFragment : Fragment() {
         when (viewModel.state.value) {
             is Playing -> viewModel.pause()
             is Prepared, Paused -> viewModel.start()
-            else -> showPlayerIsNotPreparedToast()
+            else -> showToast(getString(R.string.media_player_is_not_prepared))
         }
     }
 
@@ -185,13 +198,19 @@ class PlayerFragment : Fragment() {
 
     private fun configureMediaPlayer(previewUrl: String) = viewModel.prepare(previewUrl)
 
-    private fun showPlayerIsNotPreparedToast() {
-        val text = getText(R.string.media_player_is_not_prepared)
+    private fun showToast(text: String) =
         Toast.makeText(requireContext(), text, LENGTH_SHORT).show()
-    }
 
-    private fun configurePlaylistRecycler() = with(binding.recyclerPlaylists) {
-        adapter = playlistsAdapter
-        layoutManager = LinearLayoutManager(requireContext())
+    private fun configureBottomSheet() {
+        bottomSheet.state = STATE_HIDDEN
+
+        with(binding.recyclerPlaylists) {
+            adapter = playlistsAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+        }
+
+        binding.btnAddPlaylist.setOnClickListener {
+            findNavController().navigate(R.id.action_playerFragment_to_newPlaylistFragment)
+        }
     }
 }

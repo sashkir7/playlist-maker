@@ -14,7 +14,7 @@ class FavoriteRepositoryImpl(
     override suspend fun add(track: Track) =
         favoriteDao.add(convertor.map(track))
 
-    override suspend fun getById(id: Int): Track? {
+    override suspend fun getById(id: Long): Track? {
         val entity = favoriteDao.getById(id) ?: return null
         return convertor.map(entity)
     }

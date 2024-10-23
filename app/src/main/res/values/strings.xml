@@ -56,6 +56,7 @@
     <string name="add_new_playlist_playlist_created">Плейлист "%1$s" создан!</string>
 
     <string name="add_to_playlist_title">Добавить в плейлист</string>
-
+    <string name="track_added_to_playlist">Добавлено в плейлист %1$s</string>
+    <string name="track_dont_added_to_playlist">Трек уже добавлен в плейлист %1$s</string>
 
 </resources>

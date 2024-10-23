@@ -1,12 +1,10 @@
 package di
 
 import data.db.AppDatabase
-import data.media.playlists.new.PlaylistRepository
-import data.media.playlists.new.PlaylistRepositoryImpl
+import data.media.playlists.PlaylistRepository
+import data.media.playlists.PlaylistRepositoryImpl
 import domain.media.PlaylistInteractor
 import domain.media.PlaylistInteractorImpl
-import domain.media.playlists.new.NewPlaylistInteractor
-import domain.media.playlists.new.NewPlaylistInteractorImpl
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -21,13 +19,14 @@ val mediaModule = module {
     viewModel<PlaylistsViewModel> { PlaylistsViewModel(get()) }
 
     single<PlaylistInteractor> { PlaylistInteractorImpl(get()) }
-    single<NewPlaylistInteractor> { NewPlaylistInteractorImpl(get()) }
 
     single<PlaylistRepository> {
         PlaylistRepositoryImpl(
             context = androidContext(),
             playlistDao = get<AppDatabase>().playlistDao(),
-            convertor = get()
+            trackDao = get<AppDatabase>().playlistTracksDao(),
+            playlistConvertor = get(),
+            trackConvertor = get()
         )
     }
 }

@@ -9,9 +9,9 @@ object CustomConvertors {
     private val gson = Gson()
 
     @TypeConverter
-    fun toJson(trackIds: List<Int>): String = gson.toJson(trackIds)
+    fun toJson(trackIds: List<Long>): String = gson.toJson(trackIds)
 
     @TypeConverter
-    fun fromJson(json: String): List<Int> =
+    fun fromJson(json: String): List<Long> =
         gson.fromJson(json, object : TypeToken<List<Long>>() {}.type)
 }

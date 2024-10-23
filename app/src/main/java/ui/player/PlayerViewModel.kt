@@ -11,6 +11,7 @@ import domain.player.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import ui.player.PlayerState.AddedTrackToPlaylist
 import ui.player.PlayerState.Default
 import ui.player.PlayerState.Favorite
 import ui.player.PlayerState.GetPlaylists
@@ -85,6 +86,21 @@ class PlayerViewModel(
     fun getPlaylists() = viewModelScope.launch {
         playlistInteractor.getAll()
             .collect { playlists -> _state.postValue(GetPlaylists(playlists)) }
+    }
+
+    fun addToPlaylist(playlistId: Int, track: Track) = viewModelScope.launch {
+        val playlist = playlistInteractor.getById(playlistId)
+        val successfulAdded = if (playlist.containsTrack(track)) {
+            false
+        } else {
+            playlist.addTrack(track)
+            playlistInteractor.update(playlist)
+            playlistInteractor.addPlaylistTrack(track)
+
+            true
+        }
+
+        _state.postValue(AddedTrackToPlaylist(successfulAdded, playlist))
     }
 
     private fun startTimer() {

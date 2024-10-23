@@ -1,6 +1,5 @@
 package data.convertors
 
-import data.db.dao.PlaylistTracksDao
 import data.db.entity.PlaylistEntity
 import domain.media.Playlist
 
@@ -20,6 +19,6 @@ class PlaylistDbConvertor {
         name = entity.name,
         description = entity.description,
         pathToImage = entity.pathToImage,
-        tracks = entity.trackIds,
+        tracks = entity.trackIds.toMutableList()
     )
 }

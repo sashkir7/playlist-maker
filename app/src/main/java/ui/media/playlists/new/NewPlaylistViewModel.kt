@@ -4,11 +4,11 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import domain.media.Playlist
-import domain.media.playlists.new.NewPlaylistInteractor
+import domain.media.PlaylistInteractor
 import kotlinx.coroutines.launch
 
 class NewPlaylistViewModel(
-    private val interactor: NewPlaylistInteractor
+    private val interactor: PlaylistInteractor
 ) : ViewModel() {
 
     fun createPlaylist(playlist: Playlist) =
