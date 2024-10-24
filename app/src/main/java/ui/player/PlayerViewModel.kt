@@ -99,6 +99,8 @@ class PlayerViewModel(
             playlistInteractor.update(playlist)
             playlistInteractor.addPlaylistTrack(track)
             _trackState.postValue(AddedToPlaylist(playlist))
+
+            getPlaylists()
         }
     }
 
