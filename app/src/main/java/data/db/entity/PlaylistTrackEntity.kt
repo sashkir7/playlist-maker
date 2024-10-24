@@ -3,10 +3,10 @@ package data.db.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "favorite_tracks")
-data class TrackEntity(
+@Entity(tableName = "playlist_tracks")
+data class PlaylistTrackEntity(
     @PrimaryKey
-    val trackId: Int,
+    val trackId: Long,
     val trackName: String,
     val artistName: String,
     val collectionName: String?,
@@ -15,6 +15,5 @@ data class TrackEntity(
     val country: String?,
     val trackTimeMillis: Long,
     val artworkUrl100: String,
-    val previewUrl: String,
-    val timestamp: Long
+    val previewUrl: String
 )

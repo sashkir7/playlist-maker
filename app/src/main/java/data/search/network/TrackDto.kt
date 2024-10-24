@@ -6,7 +6,7 @@ import java.io.Serializable
 import java.util.Date
 
 data class TrackDto(
-    @SerializedName("trackId") val trackId: Int,
+    @SerializedName("trackId") val trackId: Long,
     @SerializedName("trackName") val trackName: String,
     @SerializedName("artistName") val artistName: String,
     @SerializedName("collectionName") val collectionName: String?,
@@ -52,5 +52,5 @@ data class TrackDto(
         return trackId == (other as TrackDto).trackId
     }
 
-    override fun hashCode(): Int = trackId
+    override fun hashCode(): Int = trackId.toInt()
 }
