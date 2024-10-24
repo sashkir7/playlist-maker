@@ -49,9 +49,7 @@ class PlayerFragment : Fragment() {
 
     private val viewModel: PlayerViewModel by viewModel()
 
-    private val bottomSheet: BottomSheetBehavior<LinearLayout> by lazy {
-        BottomSheetBehavior.from(binding.playlistsBottomSheet)
-    }
+    private lateinit var bottomSheet: BottomSheetBehavior<LinearLayout>
 
     private val playlistsAdapter by lazy {
         PlayerPlaylistAdapter { playlist ->
@@ -75,6 +73,7 @@ class PlayerFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         track = requireArguments().getSerializable(EXTRA_TRACK) as Track
+        bottomSheet = BottomSheetBehavior.from(binding.playlistsBottomSheet)
 
         configureBackButton()
         configureTrackCover(track.coverArtworkUrl)
