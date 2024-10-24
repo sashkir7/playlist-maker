@@ -90,11 +90,6 @@ class PlayerViewModel(
         getPlaylists()
     }
 
-    fun getPlaylists() = viewModelScope.launch {
-        playlistInteractor.getAll()
-            .collect { playlists -> _trackState.postValue(ReceivedPlaylists(playlists)) }
-    }
-
     fun addToPlaylist(playlistId: Int, track: Track) = viewModelScope.launch {
         val playlist = playlistInteractor.getById(playlistId)
         if (playlist.containsTrack(track)) {
@@ -114,6 +109,11 @@ class PlayerViewModel(
                 _playerState.postValue(Playing(playerInteractor.currentPosition()))
             }
         }
+    }
+
+    private fun getPlaylists() = viewModelScope.launch {
+        playlistInteractor.getAll()
+            .collect { playlists -> _trackState.postValue(ReceivedPlaylists(playlists)) }
     }
 
     private fun stopTimer() = timerJob?.cancel()
