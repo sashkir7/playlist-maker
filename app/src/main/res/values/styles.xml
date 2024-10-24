@@ -325,6 +325,10 @@
 
     <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:textColorHint">@color/blackYP</item>
+        <item name="boxStrokeColor">@drawable/text_field_outline</item>
+        <item name="hintTextColor">@color/blueYP</item>
+        <item name="android:textColor">@color/blackYP</item>
+
         <item name="boxStrokeWidth">1dp</item>
         <item name="boxStrokeWidthFocused">1dp</item>
         <item name="boxCornerRadiusTopEnd">4dp</item>
@@ -337,7 +341,6 @@
         <item name="android:textFontWeight">400</item>
         <item name="android:imeOptions">actionDone</item>
         <item name="android:inputType">text</item>
-        <item name="android:textSelectHandle">@color/blackYP</item>
         <item name="android:singleLine">true</item>
         <item name="android:maxLines">1</item>
         <item name="android:textSize">16sp</item>
