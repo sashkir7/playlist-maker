@@ -11,13 +11,15 @@ import domain.player.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import ui.player.PlayerState.AddedTrackToPlaylist
 import ui.player.PlayerState.Default
-import ui.player.PlayerState.Favorite
-import ui.player.PlayerState.GetPlaylists
 import ui.player.PlayerState.Paused
 import ui.player.PlayerState.Playing
 import ui.player.PlayerState.Prepared
+import ui.player.PlayerTrackState.AddedToPlaylist
+import ui.player.PlayerTrackState.AlreadyInPlaylist
+import ui.player.PlayerTrackState.InFavorite
+import ui.player.PlayerTrackState.NotInFavorite
+import ui.player.PlayerTrackState.ReceivedPlaylists
 
 class PlayerViewModel(
     private val playerInteractor: PlayerInteractor,
@@ -31,19 +33,22 @@ class PlayerViewModel(
 
     private var timerJob: Job? = null
 
-    private val _state = MutableLiveData<PlayerState>()
-    val state: LiveData<PlayerState> get() = _state
+    private val _playerState = MutableLiveData<PlayerState>()
+    val playerState: LiveData<PlayerState> get() = _playerState
+
+    private val _trackState = MutableLiveData<PlayerTrackState>()
+    val trackState: LiveData<PlayerTrackState> get() = _trackState
 
     init {
-        _state.postValue(Default)
+        _playerState.postValue(Default)
     }
 
     fun prepare(previewUrl: String) {
         playerInteractor.prepare(
             previewUrl = previewUrl,
-            onPrepareListener = { _state.postValue(Prepared) },
+            onPrepareListener = { _playerState.postValue(Prepared) },
             onCompletionListener = {
-                _state.postValue(Prepared)
+                _playerState.postValue(Prepared)
                 stopTimer()
             }
         )
@@ -51,14 +56,14 @@ class PlayerViewModel(
 
     fun start() {
         playerInteractor.start()
-        _state.postValue(Playing(playerInteractor.currentPosition()))
+        _playerState.postValue(Playing(playerInteractor.currentPosition()))
         startTimer()
     }
 
     fun pause() {
         playerInteractor.pause()
         stopTimer()
-        _state.postValue(Paused)
+        _playerState.postValue(Paused)
     }
 
     fun release() = playerInteractor.release()
@@ -67,47 +72,46 @@ class PlayerViewModel(
         val favoriteTrack = favoriteInteractor.getById(track.trackId)
         if (favoriteTrack == null) {
             favoriteInteractor.add(track)
-            _state.postValue(Favorite(isFavorite = true))
+            _trackState.postValue(InFavorite)
         } else {
             favoriteInteractor.delete(track)
-            _state.postValue(Favorite(isFavorite = false))
+            _trackState.postValue(NotInFavorite)
         }
     }
 
     fun init(track: Track) = viewModelScope.launch {
         val favoriteTrack = favoriteInteractor.getById(track.trackId)
         if (favoriteTrack == null) {
-            _state.postValue(Favorite(isFavorite = false))
+            _trackState.postValue(NotInFavorite)
         } else {
-            _state.postValue(Favorite(isFavorite = true))
+            _trackState.postValue(InFavorite)
         }
+
+        getPlaylists()
     }
 
     fun getPlaylists() = viewModelScope.launch {
         playlistInteractor.getAll()
-            .collect { playlists -> _state.postValue(GetPlaylists(playlists)) }
+            .collect { playlists -> _trackState.postValue(ReceivedPlaylists(playlists)) }
     }
 
     fun addToPlaylist(playlistId: Int, track: Track) = viewModelScope.launch {
         val playlist = playlistInteractor.getById(playlistId)
-        val successfulAdded = if (playlist.containsTrack(track)) {
-            false
+        if (playlist.containsTrack(track)) {
+            _trackState.postValue(AlreadyInPlaylist(playlist))
         } else {
             playlist.addTrack(track)
             playlistInteractor.update(playlist)
             playlistInteractor.addPlaylistTrack(track)
-
-            true
+            _trackState.postValue(AddedToPlaylist(playlist))
         }
-
-        _state.postValue(AddedTrackToPlaylist(successfulAdded, playlist))
     }
 
     private fun startTimer() {
         timerJob = viewModelScope.launch {
             while (playerInteractor.isPlaying()) {
                 delay(TRACK_CURRENT_POSITION_DELAY)
-                _state.postValue(Playing(playerInteractor.currentPosition()))
+                _playerState.postValue(Playing(playerInteractor.currentPosition()))
             }
         }
     }

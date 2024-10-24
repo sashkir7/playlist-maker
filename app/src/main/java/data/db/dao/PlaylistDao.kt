@@ -19,7 +19,7 @@ interface PlaylistDao {
     @Query("SELECT * FROM playlist WHERE id = :id")
     suspend fun getById(id: Int): PlaylistEntity
 
-    @Query("SELECT * FROM playlist ORDER BY timestamp DESC")
+    @Query("SELECT * FROM playlist ORDER BY name ASC")
     suspend fun getAll(): List<PlaylistEntity>
 
 }

@@ -20,13 +20,15 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPS
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HIDDEN
 import domain.player.Track
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import ui.player.PlayerState.AddedTrackToPlaylist
 import ui.player.PlayerState.Default
-import ui.player.PlayerState.Favorite
-import ui.player.PlayerState.GetPlaylists
 import ui.player.PlayerState.Paused
 import ui.player.PlayerState.Playing
 import ui.player.PlayerState.Prepared
+import ui.player.PlayerTrackState.AddedToPlaylist
+import ui.player.PlayerTrackState.AlreadyInPlaylist
+import ui.player.PlayerTrackState.InFavorite
+import ui.player.PlayerTrackState.NotInFavorite
+import ui.player.PlayerTrackState.ReceivedPlaylists
 import utils.cornerRadius
 import utils.isVisible
 
@@ -85,7 +87,12 @@ class PlayerFragment : Fragment() {
 
         configureBottomSheet()
 
-        viewModel.state.observe(viewLifecycleOwner) { render(it) }
+        viewModel.playerState.observe(viewLifecycleOwner) { render(it) }
+        viewModel.trackState.observe(viewLifecycleOwner) { render(it) }
+    }
+
+    override fun onResume() {
+        super.onResume()
         viewModel.init(track)
     }
 
@@ -96,7 +103,6 @@ class PlayerFragment : Fragment() {
 
     private fun render(state: PlayerState) {
         val playOrPauseButton = binding.ivPlayButton
-        val addToFavoriteButton = binding.ivAddToFavorite
         val trackCurrentPosition = binding.tvTrackCurrentPosition
 
         when (state) {
@@ -110,24 +116,26 @@ class PlayerFragment : Fragment() {
                 playOrPauseButton.setImageResource(R.drawable.pause_icon)
                 trackCurrentPosition.text = state.currentPosition
             }
+        }
+    }
 
-            is Favorite -> {
-                val resId = if (state.isFavorite) {
-                    R.drawable.added_track_to_favorite
-                } else {
-                    R.drawable.add_track_to_favorite
-                }
-                addToFavoriteButton.setImageResource(resId)
-            }
-
-            is GetPlaylists -> playlistsAdapter.setPlaylists(state.playlists)
-
-            is AddedTrackToPlaylist -> if (state.successfulAdded) {
+    private fun render(state: PlayerTrackState) {
+        when (state) {
+            is AddedToPlaylist -> {
                 bottomSheet.state = STATE_HIDDEN
                 showToast(getString(R.string.track_added_to_playlist, state.playlist.name))
-            } else {
-                showToast(getString(R.string.track_dont_added_to_playlist, state.playlist.name))
             }
+
+            is AlreadyInPlaylist ->
+                showToast(getString(R.string.track_dont_added_to_playlist, state.playlist.name))
+
+            is InFavorite ->
+                binding.ivAddToFavorite.setImageResource(R.drawable.added_track_to_favorite)
+
+            is NotInFavorite ->
+                binding.ivAddToFavorite.setImageResource(R.drawable.add_track_to_favorite)
+
+            is ReceivedPlaylists -> playlistsAdapter.setPlaylists(state.playlists)
         }
     }
 
@@ -154,7 +162,7 @@ class PlayerFragment : Fragment() {
     }
 
     private fun configurePlayButton() = binding.ivPlayButton.setOnClickListener {
-        when (viewModel.state.value) {
+        when (viewModel.playerState.value) {
             is Playing -> viewModel.pause()
             is Prepared, Paused -> viewModel.start()
             else -> showToast(getString(R.string.media_player_is_not_prepared))
@@ -187,7 +195,6 @@ class PlayerFragment : Fragment() {
 
     private fun configureAddToPlaylistButton() =
         binding.ivAddToPlaylist.setOnClickListener {
-            viewModel.getPlaylists()
             bottomSheet.state = STATE_COLLAPSED
         }
 
