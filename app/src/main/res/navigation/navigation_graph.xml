@@ -53,6 +53,10 @@
         android:id="@+id/playlistDetailsFragment"
         android:name="ui.media.playlists.details.PlaylistDetailsFragment"
         android:label="fragment_playlist_details"
-        tools:layout="@layout/fragment_playlist_details" />
+        tools:layout="@layout/fragment_playlist_details" >
+        <action
+            android:id="@+id/action_playlistDetailsFragment_to_playerFragment"
+            app:destination="@id/playerFragment" />
+    </fragment>
 
 </navigation>

@@ -22,7 +22,7 @@ class PlayerPlaylistViewHolder(
         }
 
         tvPlaylistName.text = playlist.name
-        tvPlaylistAmountTracks.text = EndingConvertor.track(playlist.tracks.size.toLong())
+        tvPlaylistAmountTracks.text = EndingConvertor.track(playlist.tracks.size)
     }
 
 }

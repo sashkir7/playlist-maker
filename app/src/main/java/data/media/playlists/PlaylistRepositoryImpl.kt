@@ -31,6 +31,17 @@ class PlaylistRepositoryImpl(
     override suspend fun addPlaylistTrack(track: Track) =
         trackDao.add(trackConvertor.map(track))
 
+    override suspend fun deleteTrackFromPlaylist(playlist: Playlist, track: Track) {
+        playlist.tracks.remove(track.trackId)
+        playlistDao.update(playlistConvertor.map(playlist))
+
+        val tracksInAllPlaylists = playlistDao.getAll()
+            .flatMap { playlistConvertor.map(it).tracks }
+        if (!tracksInAllPlaylists.contains(track.trackId)) {
+            trackDao.delete(trackConvertor.map(track))
+        }
+    }
+
     override suspend fun update(playlist: Playlist) =
         playlistDao.update(playlistConvertor.map(playlist))
 

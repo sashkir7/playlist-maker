@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import domain.media.PlaylistInteractor
+import domain.player.Track
 import kotlinx.coroutines.launch
 import ui.media.playlists.details.PlaylistDetailsState.ReceivedPlaylist
 import ui.media.playlists.details.PlaylistDetailsState.ReceivedTracks
@@ -25,5 +26,14 @@ class PlaylistDetailsViewModel(
         val playlist = interactor.getById(playlistId)
         val tracks = interactor.getPlaylistTracks(playlist)
         _state.postValue(ReceivedTracks(tracks))
+    }
+
+    fun deleteTrackFromPlaylist(
+        playlistId: Int,
+        track: Track
+    ) = viewModelScope.launch {
+        interactor.deleteTrackFromPlaylist(interactor.getById(playlistId), track)
+        getPlaylist(playlistId)
+        getTracksInPlaylist(playlistId)
     }
 }

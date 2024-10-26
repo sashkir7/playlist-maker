@@ -15,6 +15,9 @@ class PlaylistInteractorImpl(
     override suspend fun addPlaylistTrack(track: Track) =
         repository.addPlaylistTrack(track)
 
+    override suspend fun deleteTrackFromPlaylist(playlist: Playlist, track: Track) =
+        repository.deleteTrackFromPlaylist(playlist, track)
+
     override suspend fun update(playlist: Playlist) =
         repository.update(playlist)
 
