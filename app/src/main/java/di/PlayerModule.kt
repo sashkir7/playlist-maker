@@ -15,7 +15,13 @@ import ui.player.PlayerViewModel
 
 val playerModule = module {
 
-    viewModel<PlayerViewModel> { PlayerViewModel(get(), get()) }
+    viewModel<PlayerViewModel> {
+        PlayerViewModel(
+            playerInteractor = get(),
+            favoriteInteractor = get(),
+            playlistInteractor = get()
+        )
+    }
 
     single<PlayerInteractor> { PlayerInteractorImpl(get()) }
     single<FavoriteInteractor> { FavoriteInteractorImpl(get()) }

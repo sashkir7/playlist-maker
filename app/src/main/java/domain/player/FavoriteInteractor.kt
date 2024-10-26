@@ -6,7 +6,7 @@ interface FavoriteInteractor {
 
     suspend fun add(track: Track)
 
-    suspend fun getById(id: Int): Track?
+    suspend fun getById(id: Long): Track?
 
     suspend fun delete(track: Track)
 

@@ -1,18 +1,15 @@
 package ui.player
 
-sealed class PlayerState {
+sealed interface PlayerState {
 
-    object Default : PlayerState()
+    object Default : PlayerState
 
-    object Prepared : PlayerState()
+    object Prepared : PlayerState
 
     data class Playing(
         val currentPosition: String
-    ) : PlayerState()
+    ) : PlayerState
 
-    object Paused : PlayerState()
+    object Paused : PlayerState
 
-    data class Favorite(
-        val isFavorite: Boolean
-    ) : PlayerState()
 }

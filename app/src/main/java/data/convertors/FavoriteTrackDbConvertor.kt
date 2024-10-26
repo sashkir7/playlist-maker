@@ -1,12 +1,12 @@
-package data.converters
+package data.convertors
 
-import data.db.entity.TrackEntity
+import data.db.entity.FavoriteTrackEntity
 import domain.player.Track
 import java.util.Date
 
-class TrackDbConvertor {
+class FavoriteTrackDbConvertor {
 
-    fun map(track: Track): TrackEntity = TrackEntity(
+    fun map(track: Track): FavoriteTrackEntity = FavoriteTrackEntity(
         trackId = track.trackId,
         trackName = track.trackName,
         artistName = track.artistName,
@@ -20,7 +20,7 @@ class TrackDbConvertor {
         timestamp = System.currentTimeMillis()
     )
 
-    fun map(entity: TrackEntity): Track = Track(
+    fun map(entity: FavoriteTrackEntity): Track = Track(
         trackId = entity.trackId,
         trackName = entity.trackName,
         artistName = entity.artistName,
