@@ -1,4 +1,4 @@
-package ui.media.playlists
+package ui.media.playlists.all
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,8 +7,8 @@ import androidx.lifecycle.viewModelScope
 import domain.media.Playlist
 import domain.media.PlaylistInteractor
 import kotlinx.coroutines.launch
-import ui.media.playlists.PlaylistsState.Content
-import ui.media.playlists.PlaylistsState.Empty
+import ui.media.playlists.all.PlaylistsState.Content
+import ui.media.playlists.all.PlaylistsState.Empty
 
 class PlaylistsViewModel(
     private val interactor: PlaylistInteractor

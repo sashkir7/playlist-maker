@@ -1,4 +1,4 @@
-package ui.media.playlists
+package ui.media.playlists.all
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,9 +9,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
+import domain.media.Playlist
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import ui.media.playlists.PlaylistsState.Content
-import ui.media.playlists.PlaylistsState.Empty
+import ui.media.playlists.all.PlaylistsState.Content
+import ui.media.playlists.all.PlaylistsState.Empty
+import ui.media.playlists.details.PlaylistDetailsFragment
 import utils.isVisible
 
 class PlaylistsFragment : Fragment() {
@@ -25,7 +27,9 @@ class PlaylistsFragment : Fragment() {
 
     private val viewModel: PlaylistsViewModel by viewModel()
 
-    private val playlistsAdapter by lazy { PlaylistAdapter() }
+    private val playlistsAdapter by lazy {
+        PlaylistAdapter { playlist -> navigateToPlaylistDetails(playlist) }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -74,7 +78,16 @@ class PlaylistsFragment : Fragment() {
         layoutManager = GridLayoutManager(requireContext(), 2)
     }
 
-    private fun configureNewPlaylistButton() = binding.newPlaylistButton.setOnClickListener {
+    private fun configureNewPlaylistButton() = binding.newPlaylistButton
+        .setOnClickListener { navigateToNewPlaylist() }
+
+    private fun navigateToNewPlaylist() =
         findNavController().navigate(R.id.action_mediaFragment_to_newPlaylistFragment)
-    }
+
+    private fun navigateToPlaylistDetails(
+        playlist: Playlist
+    ) = findNavController().navigate(
+        resId = R.id.action_mediaFragment_to_playlistDetailsFragment,
+        args = PlaylistDetailsFragment.createArgs(checkNotNull(playlist.id))
+    )
 }

@@ -15,6 +15,8 @@ interface PlaylistRepository {
 
     suspend fun getById(id: Int): Playlist
 
+    suspend fun getPlaylistTracks(playlist: Playlist): List<Track>
+
     fun getAll(): Flow<List<Playlist>>
 
     fun saveImage(uri: Uri, image: String): String

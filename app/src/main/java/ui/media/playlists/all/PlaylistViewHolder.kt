@@ -1,4 +1,4 @@
-package ui.media.playlists
+package ui.media.playlists.all
 
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -22,6 +22,6 @@ class PlaylistViewHolder(
         }
 
         tvPlaylistName.text = playlist.name
-        tvPlaylistAmountTracks.text = EndingConvertor.track(playlist.tracks.size)
+        tvPlaylistAmountTracks.text = EndingConvertor.track(playlist.tracks.size.toLong())
     }
 }

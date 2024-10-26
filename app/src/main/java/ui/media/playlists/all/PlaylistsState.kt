@@ -1,4 +1,4 @@
-package ui.media.playlists
+package ui.media.playlists.all
 
 import domain.media.Playlist
 

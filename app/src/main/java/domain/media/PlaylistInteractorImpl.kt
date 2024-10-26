@@ -21,6 +21,9 @@ class PlaylistInteractorImpl(
     override suspend fun getById(id: Int): Playlist =
         repository.getById(id)
 
+    override suspend fun getPlaylistTracks(playlist: Playlist): List<Track> =
+        repository.getPlaylistTracks(playlist)
+
     override fun getAll(): Flow<List<Playlist>> =
         repository.getAll()
 

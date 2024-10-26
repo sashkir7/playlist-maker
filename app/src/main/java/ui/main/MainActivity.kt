@@ -28,7 +28,8 @@ class MainActivity : AppCompatActivity() {
         controller.addOnDestinationChangedListener { _, destination, _ ->
             menu.isVisible = !listOf(
                 R.id.playerFragment,
-                R.id.newPlaylistFragment
+                R.id.newPlaylistFragment,
+                R.id.playlistDetailsFragment
             ).contains(destination.id)
         }
     }

@@ -37,6 +37,10 @@ class PlaylistRepositoryImpl(
     override suspend fun getById(id: Int): Playlist =
         playlistConvertor.map(playlistDao.getById(id))
 
+    override suspend fun getPlaylistTracks(playlist: Playlist): List<Track> =
+        playlist.tracks.mapNotNull { trackDao.getById(it) }
+            .map { trackConvertor.map(it) }
+
     override fun getAll(): Flow<List<Playlist>> = flow {
         val playlists = playlistDao.getAll()
         emit(playlists.map { playlistConvertor.map(it) })

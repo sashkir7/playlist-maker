@@ -16,5 +16,4 @@ data class Playlist(
     fun containsTrack(
         track: Track
     ): Boolean = tracks.contains(track.trackId)
-
 }
