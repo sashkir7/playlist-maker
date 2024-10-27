@@ -1,12 +1,18 @@
-package ui.media.playlists.modify
+package ui.media.playlists.modify.create
 
 import android.net.Uri
+import android.os.Bundle
+import android.view.View
 import androidx.activity.addCallback
 import com.example.playlistmaker.R
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import domain.media.Playlist
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import ui.media.playlists.modify.ModifyPlaylistFragment
 
-class NewPlaylistFragment : AbstractModifyPlaylistFragment() {
+class CreatePlaylistFragment : ModifyPlaylistFragment() {
+
+    private val viewModel: CreatePlaylistViewModel by viewModel()
 
     private val confirmDialog by lazy {
         MaterialAlertDialogBuilder(requireContext())
@@ -18,7 +24,9 @@ class NewPlaylistFragment : AbstractModifyPlaylistFragment() {
             ) { _, _ -> goToBackScreen() }
     }
 
-    override fun configureSpecificViews() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         setCustomBackPressedDispatcher()
 
         binding.tvFragmentTitle.text = getString(R.string.add_new_playlist)

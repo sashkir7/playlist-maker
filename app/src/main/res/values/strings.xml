@@ -50,6 +50,7 @@
     <string name="media_empty_playlists">Вы не создали\nни одного плейлиста</string>
 
     <string name="create_title">Создать</string>
+    <string name="save_title">Сохранить</string>
     <string name="add_new_playlist">Новый плейлист</string>
     <string name="add_new_playlist_name">Название*</string>
     <string name="add_new_playlist_description">Описание</string>

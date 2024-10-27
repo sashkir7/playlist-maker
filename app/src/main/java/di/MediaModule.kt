@@ -11,12 +11,14 @@ import org.koin.dsl.module
 import ui.media.favoriteTracks.FavoriteTracksViewModel
 import ui.media.playlists.all.PlaylistsViewModel
 import ui.media.playlists.details.PlaylistDetailsViewModel
-import ui.media.playlists.modify.ModifyPlaylistViewModel
+import ui.media.playlists.modify.create.CreatePlaylistViewModel
+import ui.media.playlists.modify.edit.EditPlaylistViewModel
 
 val mediaModule = module {
 
     viewModel<FavoriteTracksViewModel> { FavoriteTracksViewModel(get()) }
-    viewModel<ModifyPlaylistViewModel> { ModifyPlaylistViewModel(get()) }
+    viewModel<CreatePlaylistViewModel> { CreatePlaylistViewModel(get()) }
+    viewModel<EditPlaylistViewModel> { EditPlaylistViewModel(get()) }
     viewModel<PlaylistsViewModel> { PlaylistsViewModel(get()) }
     viewModel<PlaylistDetailsViewModel> { PlaylistDetailsViewModel(get(), get()) }
 

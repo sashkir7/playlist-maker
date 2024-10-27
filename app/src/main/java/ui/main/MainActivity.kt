@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
             menu.isVisible = !listOf(
                 R.id.playerFragment,
                 R.id.newPlaylistFragment,
+                R.id.editPlaylistFragment,
                 R.id.playlistDetailsFragment
             ).contains(destination.id)
         }

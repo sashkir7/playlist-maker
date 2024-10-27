@@ -25,6 +25,7 @@ import ui.media.playlists.details.PlaylistDetailsState.DeletedPlaylist
 import ui.media.playlists.details.PlaylistDetailsState.ReceivedPlaylist
 import ui.media.playlists.details.PlaylistDetailsState.ReceivedTracks
 import ui.media.playlists.details.PlaylistDetailsState.SharedEmptyPlaylist
+import ui.media.playlists.modify.edit.EditPlaylistFragment
 import ui.player.PlayerFragment
 import ui.search.TracksAdapter
 import utils.EndingConvertor
@@ -144,7 +145,7 @@ class PlaylistDetailsFragment : Fragment() {
 
     private fun configureMenuBottomSheet() {
         binding.tvSharePlaylistShare.setOnClickListener { viewModel.share(playlistId) }
-        binding.tvSharePlaylistEdit.setOnClickListener { }
+        binding.tvSharePlaylistEdit.setOnClickListener { navigateToEditPlaylist(playlistId) }
         binding.tvSharePlaylistDelete.setOnClickListener {
             menuBottomSheet.state = STATE_HIDDEN
             showConfirmDeletePlaylistDialog(playlistId)
@@ -188,4 +189,9 @@ class PlaylistDetailsFragment : Fragment() {
 
     private fun showToast(text: String) =
         Toast.makeText(requireContext(), text, LENGTH_SHORT).show()
+
+    private fun navigateToEditPlaylist(playlistId: Int) = findNavController().navigate(
+        resId = R.id.action_playlistDetailsFragment_to_editPlaylistFragment,
+        args = EditPlaylistFragment.createArgs(playlistId)
+    )
 }

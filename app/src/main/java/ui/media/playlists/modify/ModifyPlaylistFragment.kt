@@ -15,14 +15,11 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.databinding.FragmentNewPlaylistBinding
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
-abstract class AbstractModifyPlaylistFragment : Fragment() {
+abstract class ModifyPlaylistFragment : Fragment() {
 
     private var _binding: FragmentNewPlaylistBinding? = null
     protected val binding get() = _binding!!
-
-    protected val viewModel: ModifyPlaylistViewModel by viewModel()
 
     private val photoPicker =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -37,8 +34,6 @@ abstract class AbstractModifyPlaylistFragment : Fragment() {
                 setImageURI(uri)
             }
         }
-
-    abstract protected fun configureSpecificViews()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,8 +50,6 @@ abstract class AbstractModifyPlaylistFragment : Fragment() {
         configureBackButton()
         configureCoverImageView()
         configureTitleEditText()
-
-        configureSpecificViews()
     }
 
     override fun onDestroyView() {
