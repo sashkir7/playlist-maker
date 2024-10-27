@@ -1,4 +1,4 @@
-package ui.media.playlists.new
+package ui.media.playlists.modify
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel
@@ -7,7 +7,7 @@ import domain.media.Playlist
 import domain.media.PlaylistInteractor
 import kotlinx.coroutines.launch
 
-class NewPlaylistViewModel(
+class ModifyPlaylistViewModel(
     private val interactor: PlaylistInteractor
 ) : ViewModel() {
 
