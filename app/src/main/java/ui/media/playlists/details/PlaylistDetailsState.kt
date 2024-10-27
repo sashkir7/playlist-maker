@@ -15,4 +15,6 @@ sealed interface PlaylistDetailsState {
 
     object SharedEmptyPlaylist : PlaylistDetailsState
 
+    object DeletedPlaylist : PlaylistDetailsState
+
 }

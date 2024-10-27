@@ -11,6 +11,7 @@
 
     <string name="black_theme">Темная тема</string>
 
+    <string name="share">Поделиться</string>
     <string name="share_application">Поделиться приложением</string>
     <string name="android_developer_url">https://practicum.yandex.ru/android-developer/</string>
 
@@ -64,7 +65,10 @@
 
     <string name="playlist_empty_tracks">Треки отсутствуют</string>
     <string name="confirm_delete_track_title">Хотите удалить трек?</string>
+    <string name="confirm_delete_playlist_title">Хотите удалить плейлист?</string>
     <string name="confirm_delete_track_message">Вы уверены, что хотите удалить трек из плейлиста?</string>
     <string name="shared_empty_playlist_message">В этом плейлисте нет списка треков, которым можно поделиться</string>
+    <string name="edit_information">Редактировать информацию</string>
+    <string name="delete_playlist">Удалить плейлист</string>
 
 </resources>

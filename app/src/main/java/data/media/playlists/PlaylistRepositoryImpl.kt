@@ -45,6 +45,12 @@ class PlaylistRepositoryImpl(
     override suspend fun update(playlist: Playlist) =
         playlistDao.update(playlistConvertor.map(playlist))
 
+    override suspend fun delete(playlistId: Int) {
+        val playlist = getById(playlistId)
+        getPlaylistTracks(playlist).forEach { deleteTrackFromPlaylist(playlist, it) }
+        playlistDao.delete(playlistConvertor.map(playlist))
+    }
+
     override suspend fun getById(id: Int): Playlist =
         playlistConvertor.map(playlistDao.getById(id))
 

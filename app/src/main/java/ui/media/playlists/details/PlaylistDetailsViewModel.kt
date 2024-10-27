@@ -8,6 +8,7 @@ import domain.media.PlaylistInteractor
 import domain.player.Track
 import domain.sharing.SharingInteractor
 import kotlinx.coroutines.launch
+import ui.media.playlists.details.PlaylistDetailsState.DeletedPlaylist
 import ui.media.playlists.details.PlaylistDetailsState.ReceivedPlaylist
 import ui.media.playlists.details.PlaylistDetailsState.ReceivedTracks
 import ui.media.playlists.details.PlaylistDetailsState.SharedEmptyPlaylist
@@ -58,5 +59,10 @@ class PlaylistDetailsViewModel(
 
             sharingInteractor.shareApp(message, playlist.name)
         }
+    }
+
+    fun deletePlaylist(playlistId: Int) = viewModelScope.launch {
+        playlistInteractor.delete(playlistId)
+        _state.postValue(DeletedPlaylist)
     }
 }

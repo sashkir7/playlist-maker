@@ -1,6 +1,7 @@
 package data.db.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.Companion.REPLACE
 import androidx.room.Query
@@ -15,6 +16,9 @@ interface PlaylistDao {
 
     @Update(onConflict = REPLACE)
     suspend fun update(playlist: PlaylistEntity)
+
+    @Delete
+    suspend fun delete(playlist: PlaylistEntity)
 
     @Query("SELECT * FROM playlist WHERE id = :id")
     suspend fun getById(id: Int): PlaylistEntity

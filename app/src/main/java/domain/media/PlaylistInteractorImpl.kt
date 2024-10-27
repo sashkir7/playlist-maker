@@ -21,6 +21,9 @@ class PlaylistInteractorImpl(
     override suspend fun update(playlist: Playlist) =
         repository.update(playlist)
 
+    override suspend fun delete(playlistId: Int) =
+        repository.delete(playlistId)
+
     override suspend fun getById(id: Int): Playlist =
         repository.getById(id)
 

@@ -88,7 +88,7 @@
             app:tint="@color/blackYP" />
 
         <ImageButton
-            android:id="@+id/btn_playlist_more"
+            android:id="@+id/btn_playlist_menu"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginStart="24dp"
@@ -140,6 +140,87 @@
             android:textSize="24sp"
             android:textStyle="bold"
             android:visibility="gone" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/menu_bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bottom_sheet"
+        android:orientation="vertical"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="384dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <View
+            android:layout_width="50dp"
+            android:layout_height="4dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/ellipse" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="8dp">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:cardCornerRadius="8dp">
+
+                <ImageView
+                    android:id="@+id/iv_share_playlist_cover"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/ic_radius_background"
+                    android:importantForAccessibility="no"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/track_placeholder" />
+
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_share_playlist_name"
+                    style="@style/TrackTitleStyle"
+                    tools:text="Best songs 2021" />
+
+                <TextView
+                    android:id="@+id/tv_share_playlist_amount_tracks"
+                    style="@style/TrackSubtitleStyle"
+                    tools:text="45 tracks" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_share_playlist_share"
+            style="@style/SettingsTextViewStyle"
+            android:layout_marginStart="16dp"
+            android:text="@string/share" />
+
+        <TextView
+            android:id="@+id/tv_share_playlist_edit"
+            style="@style/SettingsTextViewStyle"
+            android:layout_marginStart="16dp"
+            android:text="@string/edit_information" />
+
+        <TextView
+            android:id="@+id/tv_share_playlist_delete"
+            style="@style/SettingsTextViewStyle"
+            android:layout_marginStart="16dp"
+            android:text="@string/delete_playlist" />
 
     </LinearLayout>
 
