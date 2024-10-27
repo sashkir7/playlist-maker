@@ -18,7 +18,7 @@ val mediaModule = module {
     viewModel<FavoriteTracksViewModel> { FavoriteTracksViewModel(get()) }
     viewModel<NewPlaylistViewModel> { NewPlaylistViewModel(get()) }
     viewModel<PlaylistsViewModel> { PlaylistsViewModel(get()) }
-    viewModel<PlaylistDetailsViewModel> { PlaylistDetailsViewModel(get()) }
+    viewModel<PlaylistDetailsViewModel> { PlaylistDetailsViewModel(get(), get()) }
 
     single<PlaylistInteractor> { PlaylistInteractorImpl(get()) }
 

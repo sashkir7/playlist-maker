@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -16,6 +18,7 @@ import domain.player.Track
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ui.media.playlists.details.PlaylistDetailsState.ReceivedPlaylist
 import ui.media.playlists.details.PlaylistDetailsState.ReceivedTracks
+import ui.media.playlists.details.PlaylistDetailsState.SharedEmptyPlaylist
 import ui.player.PlayerFragment
 import ui.search.TracksAdapter
 import utils.EndingConvertor
@@ -60,6 +63,7 @@ class PlaylistDetailsFragment : Fragment() {
         playlistId = requireArguments().getInt(EXTRA_PLAYLIST_ID)
 
         configureBackButton()
+        configureShareButton()
         configureTracksRecycler()
 
         viewModel.state.observe(viewLifecycleOwner) { render(it) }
@@ -97,12 +101,16 @@ class PlaylistDetailsFragment : Fragment() {
                     binding.tvPlaylistEmptyTracks.isVisible = false
                 }
             }
+
+            SharedEmptyPlaylist -> showToast(getString(R.string.shared_empty_playlist_message))
         }
     }
 
-    private fun configureBackButton() = binding.ivBack.setOnClickListener {
-        findNavController().popBackStack()
-    }
+    private fun configureBackButton() = binding.ivBack
+        .setOnClickListener { findNavController().popBackStack() }
+
+    private fun configureShareButton() = binding.btnPlaylistShare
+        .setOnClickListener { viewModel.share(playlistId) }
 
     private fun configureTracksRecycler() = with(binding.rvPlaylistTracks) {
         layoutManager = LinearLayoutManager(requireContext())
@@ -133,4 +141,7 @@ class PlaylistDetailsFragment : Fragment() {
         .setPositiveButton(getString(R.string.yes)) { _, _ ->
             viewModel.deleteTrackFromPlaylist(playlistId, track)
         }.show()
+
+    private fun showToast(text: String) =
+        Toast.makeText(requireContext(), text, LENGTH_SHORT).show()
 }

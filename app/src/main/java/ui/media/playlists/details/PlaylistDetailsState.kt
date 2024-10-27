@@ -13,4 +13,6 @@ sealed interface PlaylistDetailsState {
         val tracks: List<Track>
     ) : PlaylistDetailsState
 
+    object SharedEmptyPlaylist : PlaylistDetailsState
+
 }
