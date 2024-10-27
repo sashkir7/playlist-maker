@@ -10,7 +10,6 @@ import domain.sharing.SharingInteractor
 import kotlinx.coroutines.launch
 import ui.media.playlists.details.PlaylistDetailsState.DeletedPlaylist
 import ui.media.playlists.details.PlaylistDetailsState.ReceivedPlaylist
-import ui.media.playlists.details.PlaylistDetailsState.ReceivedTracks
 import ui.media.playlists.details.PlaylistDetailsState.SharedEmptyPlaylist
 import utils.EndingConvertor
 
@@ -19,18 +18,21 @@ class PlaylistDetailsViewModel(
     private val sharingInteractor: SharingInteractor
 ) : ViewModel() {
 
-    private val _state = MutableLiveData<PlaylistDetailsState>()
-    val state: LiveData<PlaylistDetailsState> get() = _state
+    private val _playlistState = MutableLiveData<PlaylistDetailsState>()
+    val playlistState: LiveData<PlaylistDetailsState> get() = _playlistState
+
+    private val _tracksState = MutableLiveData<List<Track>>()
+    val tracksState: LiveData<List<Track>> get() = _tracksState
 
     fun getPlaylist(playlistId: Int) = viewModelScope.launch {
         val playlist = playlistInteractor.getById(playlistId)
-        _state.postValue(ReceivedPlaylist(playlist))
+        _playlistState.postValue(ReceivedPlaylist(playlist))
     }
 
     fun getTracksInPlaylist(playlistId: Int) = viewModelScope.launch {
         val playlist = playlistInteractor.getById(playlistId)
         val tracks = playlistInteractor.getPlaylistTracks(playlist)
-        _state.postValue(ReceivedTracks(tracks))
+        _tracksState.postValue(tracks)
     }
 
     fun deleteTrackFromPlaylist(
@@ -47,7 +49,7 @@ class PlaylistDetailsViewModel(
         val tracks = playlistInteractor.getPlaylistTracks(playlist)
 
         if (tracks.isEmpty()) {
-            _state.postValue(SharedEmptyPlaylist)
+            _playlistState.postValue(SharedEmptyPlaylist)
         } else {
             var message = "${playlist.name}\n"
             if (!playlist.description.isNullOrBlank()) message += "${playlist.description}\n"
@@ -63,6 +65,6 @@ class PlaylistDetailsViewModel(
 
     fun deletePlaylist(playlistId: Int) = viewModelScope.launch {
         playlistInteractor.delete(playlistId)
-        _state.postValue(DeletedPlaylist)
+        _playlistState.postValue(DeletedPlaylist)
     }
 }

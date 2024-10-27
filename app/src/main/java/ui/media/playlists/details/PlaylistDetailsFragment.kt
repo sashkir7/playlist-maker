@@ -23,7 +23,6 @@ import domain.player.Track
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ui.media.playlists.details.PlaylistDetailsState.DeletedPlaylist
 import ui.media.playlists.details.PlaylistDetailsState.ReceivedPlaylist
-import ui.media.playlists.details.PlaylistDetailsState.ReceivedTracks
 import ui.media.playlists.details.PlaylistDetailsState.SharedEmptyPlaylist
 import ui.media.playlists.modify.edit.EditPlaylistFragment
 import ui.player.PlayerFragment
@@ -79,7 +78,8 @@ class PlaylistDetailsFragment : Fragment() {
         configureTracksRecycler()
         configureMenuBottomSheet()
 
-        viewModel.state.observe(viewLifecycleOwner) { render(it) }
+        viewModel.playlistState.observe(viewLifecycleOwner) { render(it) }
+        viewModel.tracksState.observe(viewLifecycleOwner) { render(it) }
 
         viewModel.getPlaylist(playlistId)
         viewModel.getTracksInPlaylist(playlistId)
@@ -106,26 +106,26 @@ class PlaylistDetailsFragment : Fragment() {
                 }
             }
 
-            is ReceivedTracks -> {
-                var totalMillis = 0L
-                state.tracks.map { it.trackTimeMillis }.forEach { totalMillis += it }
-                val minutesPart = EndingConvertor.minute(totalMillis / (60 * 1_000))
-                val tracksPart = EndingConvertor.track(state.tracks.size)
-                binding.tvPlaylistTracksTime.text = "$minutesPart • $tracksPart"
-
-                tracksAdapter.setTracks(state.tracks)
-                if (state.tracks.isEmpty()) {
-                    binding.rvPlaylistTracks.isVisible = false
-                    binding.tvPlaylistEmptyTracks.isVisible = true
-                } else {
-                    binding.rvPlaylistTracks.isVisible = true
-                    binding.tvPlaylistEmptyTracks.isVisible = false
-                }
-            }
-
             SharedEmptyPlaylist -> showToast(getString(R.string.shared_empty_playlist_message))
 
             DeletedPlaylist -> findNavController().navigateUp()
+        }
+    }
+
+    private fun render(tracks: List<Track>) {
+        var totalMillis = 0L
+        tracks.map { it.trackTimeMillis }.forEach { totalMillis += it }
+        val minutesPart = EndingConvertor.minute(totalMillis / (60 * 1_000))
+        val tracksPart = EndingConvertor.track(tracks.size)
+        binding.tvPlaylistTracksTime.text = "$minutesPart • $tracksPart"
+
+        tracksAdapter.setTracks(tracks)
+        if (tracks.isEmpty()) {
+            binding.rvPlaylistTracks.isVisible = false
+            binding.tvPlaylistEmptyTracks.isVisible = true
+        } else {
+            binding.rvPlaylistTracks.isVisible = true
+            binding.tvPlaylistEmptyTracks.isVisible = false
         }
     }
 
