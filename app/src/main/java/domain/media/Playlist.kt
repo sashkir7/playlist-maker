@@ -6,8 +6,8 @@ import java.io.Serializable
 data class Playlist(
     val id: Int? = null,
     var name: String,
-    var description: String?,
-    var pathToImage: String?,
+    val description: String?,
+    val pathToImage: String?,
     val tracks: MutableList<Long> = mutableListOf()
 ) : Serializable {
 

@@ -62,7 +62,7 @@ class EditPlaylistFragment : ModifyPlaylistFragment() {
         val title = binding.etTitle.text.toString()
         val description = binding.etDescription.text?.toString()
         val pathToImage = (binding.ivPlaylistCover.tag as? Uri)
-            ?.let { viewModel.saveImage(it, title) }
+            ?.let { viewModel.saveImage(it, it.lastPathSegment ?: title) }
 
         viewModel.updatePlaylist(title, description, pathToImage)
     }

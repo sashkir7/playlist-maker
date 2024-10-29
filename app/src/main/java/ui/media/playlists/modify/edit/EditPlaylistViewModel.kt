@@ -24,11 +24,12 @@ class EditPlaylistViewModel(
         description: String?,
         pathToImage: String?
     ) = viewModelScope.launch {
-        val playlist = state.value!!
-        playlist.name = name
-        playlist.description = description
-        pathToImage?.let { playlist.pathToImage = it }
-
-        interactor.update(playlist)
+        val currentPlaylist = state.value!!
+        val updatedPlaylist = currentPlaylist.copy(
+            name = name,
+            description = description,
+            pathToImage = pathToImage ?: currentPlaylist.pathToImage
+        )
+        interactor.update(updatedPlaylist)
     }
 }
