@@ -106,7 +106,10 @@ class PlaylistDetailsFragment : Fragment() {
                 }
             }
 
-            SharedEmptyPlaylist -> showToast(getString(R.string.shared_empty_playlist_message))
+            SharedEmptyPlaylist -> {
+                menuBottomSheet.state = STATE_HIDDEN
+                showToast(getString(R.string.shared_empty_playlist_message))
+            }
 
             DeletedPlaylist -> findNavController().navigateUp()
         }
