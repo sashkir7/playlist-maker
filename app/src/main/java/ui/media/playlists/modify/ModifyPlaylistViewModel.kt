@@ -9,6 +9,6 @@ abstract class ModifyPlaylistViewModel(
 ) : ViewModel() {
 
     fun saveImage(uri: Uri, image: String): String =
-        interactor.saveImage(uri, image)
+        interactor.saveImage(uri.toString(), image)
 
 }

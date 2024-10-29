@@ -63,12 +63,12 @@ class PlaylistRepositoryImpl(
         emit(playlists.map { playlistConvertor.map(it) })
     }
 
-    override fun saveImage(uri: Uri, image: String): String {
+    override fun saveImage(uri: String, image: String): String {
         val filePath = File(context.getExternalFilesDir(DIRECTORY_PICTURES), "playlists")
         if (!filePath.exists()) filePath.mkdirs()
 
         val file = File(filePath, image)
-        val inputStream = context.contentResolver.openInputStream(uri)
+        val inputStream = context.contentResolver.openInputStream(Uri.parse(uri))
         val outputStream = FileOutputStream(file)
         BitmapFactory.decodeStream(inputStream)
             .compress(JPEG, 30, outputStream)

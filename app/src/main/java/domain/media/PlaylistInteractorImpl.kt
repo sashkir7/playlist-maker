@@ -1,6 +1,5 @@
 package domain.media
 
-import android.net.Uri
 import data.media.playlists.PlaylistRepository
 import domain.player.Track
 import kotlinx.coroutines.flow.Flow
@@ -33,6 +32,6 @@ class PlaylistInteractorImpl(
     override fun getAll(): Flow<List<Playlist>> =
         repository.getAll()
 
-    override fun saveImage(uri: Uri, image: String): String =
+    override fun saveImage(uri: String, image: String): String =
         repository.saveImage(uri, image)
 }

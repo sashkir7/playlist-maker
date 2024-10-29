@@ -1,6 +1,5 @@
 package data.media.playlists
 
-import android.net.Uri
 import domain.media.Playlist
 import domain.player.Track
 import kotlinx.coroutines.flow.Flow
@@ -23,6 +22,6 @@ interface PlaylistRepository {
 
     fun getAll(): Flow<List<Playlist>>
 
-    fun saveImage(uri: Uri, image: String): String
+    fun saveImage(uri: String, image: String): String
 
 }
