@@ -5,7 +5,7 @@ import java.io.Serializable
 
 data class Playlist(
     val id: Int? = null,
-    val name: String,
+    var name: String,
     val description: String?,
     val pathToImage: String?,
     val tracks: MutableList<Long> = mutableListOf()
@@ -16,5 +16,4 @@ data class Playlist(
     fun containsTrack(
         track: Track
     ): Boolean = tracks.contains(track.trackId)
-
 }

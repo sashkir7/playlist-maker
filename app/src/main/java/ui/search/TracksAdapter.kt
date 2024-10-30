@@ -7,7 +7,8 @@ import com.example.playlistmaker.R
 import domain.player.Track
 
 class TracksAdapter(
-    private val onClickAction: (track: Track) -> Unit
+    private val onLongClickAction: (track: Track) -> Unit = {},
+    private val onClickAction: (track: Track) -> Unit,
 ) : RecyclerView.Adapter<TracksViewHolder>() {
 
     private var tracks: List<Track> = emptyList()
@@ -24,6 +25,7 @@ class TracksAdapter(
         val track = tracks[position]
         holder.bind(track)
         holder.itemView.setOnClickListener { onClickAction(track) }
+        holder.itemView.setOnLongClickListener { onLongClickAction(track); true }
     }
 
     fun setTracks(tracks: List<Track>) {

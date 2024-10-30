@@ -1,4 +1,4 @@
-package ui.media.playlists
+package ui.media.playlists.all
 
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide

@@ -31,23 +31,44 @@ class PlaylistRepositoryImpl(
     override suspend fun addPlaylistTrack(track: Track) =
         trackDao.add(trackConvertor.map(track))
 
+    override suspend fun deleteTrackFromPlaylist(playlist: Playlist, track: Track) {
+        playlist.tracks.remove(track.trackId)
+        playlistDao.update(playlistConvertor.map(playlist))
+
+        val tracksInAllPlaylists = playlistDao.getAll()
+            .flatMap { playlistConvertor.map(it).tracks }
+        if (!tracksInAllPlaylists.contains(track.trackId)) {
+            trackDao.delete(trackConvertor.map(track))
+        }
+    }
+
     override suspend fun update(playlist: Playlist) =
         playlistDao.update(playlistConvertor.map(playlist))
 
+    override suspend fun delete(playlistId: Int) {
+        val playlist = getById(playlistId)
+        getPlaylistTracks(playlist).forEach { deleteTrackFromPlaylist(playlist, it) }
+        playlistDao.delete(playlistConvertor.map(playlist))
+    }
+
     override suspend fun getById(id: Int): Playlist =
         playlistConvertor.map(playlistDao.getById(id))
+
+    override suspend fun getPlaylistTracks(playlist: Playlist): List<Track> =
+        playlist.tracks.reversed().mapNotNull { trackDao.getById(it) }
+            .map { trackConvertor.map(it) }
 
     override fun getAll(): Flow<List<Playlist>> = flow {
         val playlists = playlistDao.getAll()
         emit(playlists.map { playlistConvertor.map(it) })
     }
 
-    override fun saveImage(uri: Uri, image: String): String {
+    override fun saveImage(uri: String, image: String): String {
         val filePath = File(context.getExternalFilesDir(DIRECTORY_PICTURES), "playlists")
         if (!filePath.exists()) filePath.mkdirs()
 
         val file = File(filePath, image)
-        val inputStream = context.contentResolver.openInputStream(uri)
+        val inputStream = context.contentResolver.openInputStream(Uri.parse(uri))
         val outputStream = FileOutputStream(file)
         BitmapFactory.decodeStream(inputStream)
             .compress(JPEG, 30, outputStream)
